@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1037153558802",
+    "firebase_url": "https://timecontrol-c835b.firebaseio.com",
+    "project_id": "timecontrol-c835b",
+    "storage_bucket": "timecontrol-c835b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037153558802:android:ac1e345af11aaa670153cb",
+        "android_client_info": {
+          "package_name": "com.example.timecontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037153558802-nvlum5u9fkeeoqpl4o5df5r033nf5139.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timecontrol",
+            "certificate_hash": "58b3d879f46282974d7abd392b5bf195f82d6824"
+          }
+        },
+        {
+          "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKJpqgosEvnR5xag8Ju8NcFu35qsPtXeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
