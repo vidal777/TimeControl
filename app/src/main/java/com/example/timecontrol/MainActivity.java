@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private Button btnLogin, btnSign,btnLog;
     private RadioGroup rdGroup;
     private RadioButton rdUser,rdAdmin;
