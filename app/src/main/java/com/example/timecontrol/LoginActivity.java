@@ -52,9 +52,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             FancyToast.makeText(LoginActivity.this, "LogIn succes.",
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Intent intent= new Intent(MainActivity.this,GeneralActivity.class);
-                            //startActivity(intent);
-                            //updateUI(user);
+
+                                Intent intent=new Intent(LoginActivity.this,MainMedia.class);
+                                startActivity(intent);
+                                finish();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithEmail:failure", task.getException());

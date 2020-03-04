@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,11 +35,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseAuth mAuth;
     private Button btnLogin, btnSign,btnLog;
-    private EditText edtEmail, edtPass,edtName;
+    private RadioGroup rdGroup;
+    private RadioButton rdUser,rdAdmin;
+    private EditText edtEmail, edtPass,edtName,edtCode;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleSignInClient mGoogleSignInClient;
+
+    private String type_user;
 
 
 
@@ -49,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edtEmail = findViewById(R.id.edtEmail);
         edtPass = findViewById(R.id.edtPass);
         edtName = findViewById(R.id.edtName);
+        edtCode=findViewById(R.id.edtCode);
+
+        rdAdmin=findViewById(R.id.rdAdmin);
+        rdUser=findViewById(R.id.rdUser);
+        rdGroup=findViewById(R.id.rdGroup);
 
         btnSign = findViewById(R.id.btnSign);
         btnLog=findViewById(R.id.btnLog2);
@@ -69,6 +80,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLog.setOnClickListener(this);
         findViewById(R.id.signInButton).setOnClickListener(this);
 
+        rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId==R.id.rdAdmin){
+                    type_user="Admin";
+                    edtCode.setVisibility(View.VISIBLE);
+                }else{
+                    type_user="User";
+                    edtCode.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
+
     }
 
     private void signUp(String email, final String password,final String name){
@@ -88,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             databaseReference.child("email").setValue(task.getResult().getUser().getEmail());
                             databaseReference.child("name").setValue(name);
                             databaseReference.child("date").setValue(datetime());
+                            databaseReference.child("type_user").setValue(type_user);
+                            transitionToMediaActivity();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -113,7 +140,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
                 break;
             case R.id.signInButton:
-                signIn();
+                if (type_user!=null){
+                    signIn();
+                }else {
+                    FancyToast.makeText(MainActivity.this, "Need type user.",
+                            FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                }
                 break;
             case R.id.btnLog2:
                 Intent intent=new Intent(MainActivity.this,LoginActivity.class);
@@ -177,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             databaseReference.child("email").setValue(task.getResult().getUser().getEmail());
                             databaseReference.child("name").setValue(task.getResult().getUser().getDisplayName());
                             databaseReference.child("date").setValue(datetime());
+                            databaseReference.child("type_user").setValue(type_user);
+
+                            transitionToMediaActivity();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -201,6 +236,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void transitionToMediaActivity(){
+        Intent intent=new Intent(MainActivity.this,MainMedia.class);
+        startActivity(intent);
+        finish();
     }
 
 
