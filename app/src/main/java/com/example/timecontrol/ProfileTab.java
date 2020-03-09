@@ -40,6 +40,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         View view=inflater.inflate(R.layout.fragment_profile_tab, container, false);
 
         btnFitxar= view.findViewById(R.id.btnFitxar);
+        mAuth = FirebaseAuth.getInstance();
 
         btnFitxar.setOnClickListener(ProfileTab.this);
 
@@ -58,29 +59,23 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if (btnFitxar.getText().toString()=="FITXAR"){
-            //FirebaseUser user =  mAuth.getCurrentUser();
-            //DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
-              //      .getUid());
-            //databaseReference.child("name").setValue("qualsevol");
-
-            /*
             FirebaseUser user =  mAuth.getCurrentUser();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user.getUid());
-            databaseReference.child("datetime_entrance").setValue(datetime());
-*/
-            btnFitxar.setText("Acabar Jornada");
-            btnFitxar.setBackgroundColor(R.color.green);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
+                    .getUid());
+            databaseReference.child("datetime_entrance " + datetime()).setValue(datetime());
 
+            btnFitxar.setText("Acabar Jornada");
+            //btnFitxar.setBackgroundColor(R.color.green);
+            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
         }else{
-            /*
             FirebaseUser user =  mAuth.getCurrentUser();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user.getUid());
-            databaseReference.child("datetime_exit").setValue(datetime());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
+                    .getUid());
+            databaseReference.child("datetime_exit " + datetime()).setValue(datetime());
 
-             */
             btnFitxar.setText("FITXAR");
-            btnFitxar.setBackgroundColor(R.color.red);
+            btnFitxar.setBackgroundResource(R.drawable.custom_button);
         }
 
     }

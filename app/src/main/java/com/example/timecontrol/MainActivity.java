@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private Button btnLogin, btnSign,btnLog;
     private RadioGroup rdGroup;
     private RadioButton rdUser,rdAdmin;
@@ -161,7 +161,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
         if(currentUser != null){
-            //Transition next activity
+            Intent intent=new Intent(MainActivity.this,MainMedia.class);
+            startActivity(intent);
         }
     }
 
