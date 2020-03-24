@@ -3,9 +3,19 @@ package com.example.timecontrol;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +24,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainMedia extends AppCompatActivity {
+    private static final int LOCATION = 1;
+
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -36,6 +48,12 @@ public class MainMedia extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager, false);
 
         mAuth=FirebaseAuth.getInstance();
+
+        BroadcastReceiver br = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        this.registerReceiver(br, filter);
 
     }
 
@@ -63,5 +81,41 @@ public class MainMedia extends AppCompatActivity {
     private void logout(){
         mAuth.signOut();
         finish();
+    }
+
+
+
+    protected void onStart() { //Claim the location permission
+        super.onStart();
+        //Assume you want to read the SSID when the activity is started
+        tryToReadSSID();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == LOCATION){
+            //User allowed the location and you can read it now
+            tryToReadSSID();
+        }
+    }
+
+    private void tryToReadSSID() {
+        Log.i("primera","prim");
+        //If requested permission isn't Granted yet
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i("segon","segon");
+            //Request permission from user
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION);
+        }else{//Permission already granted
+            Log.i("xxxx","sexxxgon");
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            if(wifiInfo.getSupplicantState() == SupplicantState.COMPLETED){
+                String ssid = wifiInfo.getSSID();//Here you can access your SSID
+                System.out.println(ssid);
+                Log.i("qualsevol", "onCreate: "+ssid);
+            }
+        }
     }
 }

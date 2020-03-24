@@ -2,6 +2,10 @@ package com.example.timecontrol;
 
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,7 +30,7 @@ import java.util.Date;
 public class ProfileTab extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
 
-        private Button btnFitxar;
+    public static Button btnFitxar;
 
     public ProfileTab() {
         // Required empty public constructor
@@ -43,6 +47,8 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         btnFitxar.setOnClickListener(ProfileTab.this);
+
+
 
         return view;
     }
