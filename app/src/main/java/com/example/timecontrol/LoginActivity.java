@@ -53,9 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                                Intent intent=new Intent(LoginActivity.this,MainMedia.class);
-                                startActivity(intent);
-                                finish();
+
+                            transitionToMediaActivity();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -82,5 +81,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
+    }
+
+    private void transitionToMediaActivity(){
+        Intent intent=new Intent(LoginActivity.this,MainMedia.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void signUp(String email, final String password,final String name){
+    private void signUp(String email, final String password){  //Sign Up Normal Mode
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUser:success");
+                            /*
                             FancyToast.makeText(MainActivity.this, "Authentication succes.",
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
@@ -114,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             databaseReference.child("name").setValue(name);
                             databaseReference.child("date").setValue(datetime());
                             databaseReference.child("type_user").setValue(type_user);
+
+                             */
                             transitionToMediaActivity();
 
                         } else {
@@ -137,7 +142,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSign:
-                signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
+                if (type_user!=null){
+                    if (edtEmail.getText().toString().trim().length() > 0 && edtPass.getText().toString().trim().length() > 0 && edtName.getText().toString().trim().length() > 0){
+
+                        //signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
+                        signUp(edtEmail.getText().toString(), edtPass.getText().toString());
+                    }else{
+                        FancyToast.makeText(MainActivity.this, "Some gaps in blank",
+                                FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
+
+                    }
+                }else {
+                    FancyToast.makeText(MainActivity.this, "Need type user.",
+                            FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                }
+
                 break;
             case R.id.signInButton:
                 if (type_user!=null){
@@ -155,14 +174,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
         if(currentUser != null){
-            Intent intent=new Intent(MainActivity.this,MainMedia.class);
-            startActivity(intent);
+            transitionToMediaActivity();
         }
     }
 
@@ -186,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // [END onactivityresult]
 
     // [START auth_with_google]
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) { //Sign Up Google Mode
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
         //showProgressBar();
@@ -244,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
         finish();
     }
+
 
 
 

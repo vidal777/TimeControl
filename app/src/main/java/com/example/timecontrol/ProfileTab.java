@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         btnFitxar.setOnClickListener(ProfileTab.this);
+        btnFitxar.setText("FITXAR");
 
 
 
@@ -74,6 +76,9 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             //btnFitxar.setBackgroundColor(R.color.green);
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
+            FancyToast.makeText(getContext(), "GET IN",
+                    FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+
         }else{
             FirebaseUser user =  mAuth.getCurrentUser();
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
@@ -82,6 +87,9 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
             btnFitxar.setText("FITXAR");
             btnFitxar.setBackgroundResource(R.drawable.custom_button);
+
+            FancyToast.makeText(getContext(), "GET OUT",
+                    FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
         }
 
     }

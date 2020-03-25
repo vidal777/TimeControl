@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -31,11 +32,14 @@ public class MainMedia extends AppCompatActivity {
     private TabLayout tabLayout;
     private TabAdapter tabAdapter;
     private FirebaseAuth mAuth;
+    private BroadcastReceiver br;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_media);
+
 
         setTitle("AccesControl");
 
@@ -49,11 +53,14 @@ public class MainMedia extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
 
-        BroadcastReceiver br = new MyBroadcastReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        /*
+        br = new MyBroadcastReceiver();
+        filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(br, filter);
+
+         */
 
     }
 
@@ -74,17 +81,32 @@ public class MainMedia extends AppCompatActivity {
             case R.id.logoutUser:
                 logout();
                 break;
+            case android.R.id.home:
+                //finish();
+                onBackPressed();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void logout(){
-        mAuth.signOut();
-        finish();
+
+    @Override
+        public void onBackPressed() {
+            super.onBackPressed();
+            this.finish();
     }
 
 
 
+    private void logout(){
+        mAuth.signOut();
+        finish();
+        Intent intent=new Intent(MainMedia.this,MainActivity.class);
+        startActivity(intent);
+    }
+
+
+    /*
     protected void onStart() { //Claim the location permission
         super.onStart();
         //Assume you want to read the SSID when the activity is started
@@ -101,21 +123,19 @@ public class MainMedia extends AppCompatActivity {
     }
 
     private void tryToReadSSID() {
-        Log.i("primera","prim");
         //If requested permission isn't Granted yet
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.i("segon","segon");
             //Request permission from user
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION);
         }else{//Permission already granted
-            Log.i("xxxx","sexxxgon");
             WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             if(wifiInfo.getSupplicantState() == SupplicantState.COMPLETED){
                 String ssid = wifiInfo.getSSID();//Here you can access your SSID
                 System.out.println(ssid);
-                Log.i("qualsevol", "onCreate: "+ssid);
             }
         }
     }
+
+     */
 }

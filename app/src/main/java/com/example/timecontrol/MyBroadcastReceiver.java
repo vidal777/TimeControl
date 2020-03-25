@@ -26,7 +26,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         String ssid= info.getSSID().toString();
         String name="MOVISTAR_VIDAL";  //Wifi Name
 
-        Log.i("PROVVA",ssid);
 
         if (ssid.startsWith("\"")) { //Substract addition characters
             ssid = ssid.substring(1, ssid.length() - 1);
@@ -64,7 +63,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             sb.append("Action: " + intent.getAction() + "\n");
             sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
             String log = sb.toString();
-            Log.d(TAG, log);
             return log;
         }
 
