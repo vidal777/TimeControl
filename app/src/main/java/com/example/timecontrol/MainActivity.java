@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -52,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
 
         edtEmail = findViewById(R.id.edtEmail);
         edtPass = findViewById(R.id.edtPass);
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void signUp(String email, final String password){  //Sign Up Normal Mode
+    private void signUp(String email, final String password,final String name){  //Sign Up Normal Mode
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUser:success");
-                            /*
+
                             FancyToast.makeText(MainActivity.this, "Authentication succes.",
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             databaseReference.child("date").setValue(datetime());
                             databaseReference.child("type_user").setValue(type_user);
 
-                             */
+
                             transitionToMediaActivity();
 
                         } else {
@@ -134,9 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    private void signOut(){
-        FirebaseAuth.getInstance().signOut();
-    }
 
     @Override
     public void onClick(View v) {
@@ -144,9 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSign:
                 if (type_user!=null){
                     if (edtEmail.getText().toString().trim().length() > 0 && edtPass.getText().toString().trim().length() > 0 && edtName.getText().toString().trim().length() > 0){
-
-                        //signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
-                        signUp(edtEmail.getText().toString(), edtPass.getText().toString());
+                        signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
                     }else{
                         FancyToast.makeText(MainActivity.this, "Some gaps in blank",
                                 FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();

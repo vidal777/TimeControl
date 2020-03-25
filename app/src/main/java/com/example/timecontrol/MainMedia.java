@@ -60,7 +60,7 @@ public class MainMedia extends AppCompatActivity {
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(br, filter);
 
-         */
+*/
 
     }
 
@@ -106,13 +106,14 @@ public class MainMedia extends AppCompatActivity {
     }
 
 
-    /*
+/*
     protected void onStart() { //Claim the location permission
         super.onStart();
         //Assume you want to read the SSID when the activity is started
         tryToReadSSID();
     }
 
+    //PERMISSIONS LOCATION FOR BROADCAST
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -136,6 +137,6 @@ public class MainMedia extends AppCompatActivity {
             }
         }
     }
+    */
 
-     */
 }
