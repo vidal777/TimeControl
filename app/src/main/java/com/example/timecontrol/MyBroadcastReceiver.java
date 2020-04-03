@@ -24,7 +24,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         WifiInfo info = wifiManager.getConnectionInfo ();
 
         String ssid= info.getSSID().toString();
-        String name="MOVISTAR_VIDAL";  //Wifi Name
+        String name="MOVISTAR_VIDAL1";  //Wifi Name
 
 
         if (ssid.startsWith("\"")) { //Substract addition characters
@@ -35,7 +35,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             ProfileTab.btnFitxar.setEnabled(true);
 
         }else{  //disable button
-            ProfileTab.btnFitxar.setEnabled(false);
+            if(ProfileTab.btnFitxar.isEnabled()){
+
+                ProfileTab.btnFitxar.setEnabled(false);
+            }
         }
 
         final PendingResult pendingResult = goAsync();

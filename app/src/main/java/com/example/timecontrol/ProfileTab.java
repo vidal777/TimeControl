@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,45 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e("DEBUG", "PROVA");
+
+
+        if (btnFitxar.getText().toString()=="FITXAR") {
+            btnFitxar.setText("FITXAR");
+        }else{
+            btnFitxar.setText("Acabar Jornada");
+        }
+
+
+        //Save the fragment's state here
+    }
+
+    @Override
+    public void onStart() {
+        Log.e("DEBUG", "onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.e("DEBUG", "onResume of LoginFragment");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.e("DEBUG", "OnPause of loginFragment");
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e("DEBUG", "Destroy");
+        super.onDestroy();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,13 +90,23 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         btnFitxar.setOnClickListener(ProfileTab.this);
         btnFitxar.setText("FITXAR");
 
+        Log.i("PROVA","SDGDAFGDFGDFGDFGDFg");
 
 
         return view;
     }
 
+
+
     private String datetime(){
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+
+        return ISO_8601_FORMAT.format(new Date());
+
+    }
+
+    private String time(){
+        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
         return ISO_8601_FORMAT.format(new Date());
 
@@ -76,8 +126,11 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             //btnFitxar.setBackgroundColor(R.color.green);
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
-            FancyToast.makeText(getContext(), "GET IN",
+            FancyToast.makeText(getContext(), "GET IN " + time(),
                     FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+
+            API api = new API(getContext());
+            api.get_in(user.getUid(),user.getDisplayName());
 
         }else{
             FirebaseUser user =  mAuth.getCurrentUser();
@@ -88,8 +141,11 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             btnFitxar.setText("FITXAR");
             btnFitxar.setBackgroundResource(R.drawable.custom_button);
 
-            FancyToast.makeText(getContext(), "GET OUT",
+            FancyToast.makeText(getContext(), "GET OUT " + time(),
                     FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+
+            API api = new API(getContext());
+            api.get_out(user.getUid(),user.getDisplayName());
         }
 
     }

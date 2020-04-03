@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -99,7 +101,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+
+
+
+
     }
+
+
 
     private void signUp(String email, final String password,final String name){  //Sign Up Normal Mode
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -113,13 +121,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             FancyToast.makeText(MainActivity.this, "Authentication succes.",
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
-                            FirebaseUser user =  mAuth.getCurrentUser();
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User profile updated.");
+                                            }
+                                        }
+                                    });
+
+
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(task.getResult()
                                     .getUser().getUid());
                             databaseReference.child("email").setValue(task.getResult().getUser().getEmail());
                             databaseReference.child("name").setValue(name);
                             databaseReference.child("date").setValue(datetime());
                             databaseReference.child("type_user").setValue(type_user);
+
+
+                            API api = new API(MainActivity.this);
+                            api.register_user(task.getResult()
+                                    .getUser().getUid(),type_user,name,task.getResult().getUser().getEmail());
+
 
 
                             transitionToMediaActivity();
@@ -134,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
     }
+
+
 
 
 
@@ -195,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
         if(currentUser != null){
+            Log.i("dfgdfgdfgdfgdfgdfgdfg","sdfsdfsdfsdfsdfsdfsdfsdf");
             transitionToMediaActivity();
         }
     }
@@ -250,8 +284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            //updateUI(null);
+
                         }
 
                     }

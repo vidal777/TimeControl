@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -53,14 +54,15 @@ public class MainMedia extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
 
-        /*
+/*
         br = new MyBroadcastReceiver();
         filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(br, filter);
 
-*/
+
+ */
 
     }
 
@@ -93,7 +95,6 @@ public class MainMedia extends AppCompatActivity {
     @Override
         public void onBackPressed() {
             super.onBackPressed();
-            this.finish();
     }
 
 
@@ -137,6 +138,6 @@ public class MainMedia extends AppCompatActivity {
             }
         }
     }
-    */
+*/
 
 }
