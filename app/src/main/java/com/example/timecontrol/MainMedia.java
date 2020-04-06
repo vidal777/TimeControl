@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,9 +36,12 @@ public class MainMedia extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private BroadcastReceiver br;
     private IntentFilter filter;
+    public static Button btnFitxar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_media);
 
@@ -54,6 +58,8 @@ public class MainMedia extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
 
+        Log.i("ASFSDGSDFG","WSGSDFGSDGSDGSDGSDG");
+
 /*
         br = new MyBroadcastReceiver();
         filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -61,10 +67,10 @@ public class MainMedia extends AppCompatActivity {
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(br, filter);
 
-
  */
-
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,7 +113,7 @@ public class MainMedia extends AppCompatActivity {
     }
 
 
-/*
+
     protected void onStart() { //Claim the location permission
         super.onStart();
         //Assume you want to read the SSID when the activity is started
@@ -138,6 +144,6 @@ public class MainMedia extends AppCompatActivity {
             }
         }
     }
-*/
+
 
 }

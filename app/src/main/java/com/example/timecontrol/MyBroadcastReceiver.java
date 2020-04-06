@@ -27,12 +27,20 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         String name="MOVISTAR_VIDAL1";  //Wifi Name
 
 
+
         if (ssid.startsWith("\"")) { //Substract addition characters
             ssid = ssid.substring(1, ssid.length() - 1);
         }
 
+
+//        ProfileTab.btnFitxar.setEnabled(true);
+
+        /*
+
         if( ssid.equals(name)){  //Enable button
-            ProfileTab.btnFitxar.setEnabled(true);
+            if(!ProfileTab.btnFitxar.isEnabled()) {
+                ProfileTab.btnFitxar.setEnabled(true);
+            }
 
         }else{  //disable button
             if(ProfileTab.btnFitxar.isEnabled()){
@@ -40,6 +48,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 ProfileTab.btnFitxar.setEnabled(false);
             }
         }
+
+         */
+
+
 
         final PendingResult pendingResult = goAsync();
         Task asyncTask = new Task(pendingResult, intent);

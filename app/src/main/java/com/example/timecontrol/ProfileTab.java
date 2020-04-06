@@ -4,6 +4,7 @@ package com.example.timecontrol;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -16,6 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -34,49 +40,26 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     public static Button btnFitxar;
 
+    private SharedPreferences pref;
+
+    private SharedPreferences.Editor editor;
+
     public ProfileTab() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.e("DEBUG", "PROVA");
-
-
-        if (btnFitxar.getText().toString()=="FITXAR") {
-            btnFitxar.setText("FITXAR");
-        }else{
-            btnFitxar.setText("Acabar Jornada");
-        }
-
-
-        //Save the fragment's state here
-    }
 
     @Override
     public void onStart() {
         Log.e("DEBUG", "onStart");
+        if (pref.getBoolean("Valor",false)) {
+            btnFitxar.setText("Acabar Jornada");
+            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+        }
         super.onStart();
     }
 
-    @Override
-    public void onResume() {
-        Log.e("DEBUG", "onResume of LoginFragment");
-        super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        Log.e("DEBUG", "OnPause of loginFragment");
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.e("DEBUG", "Destroy");
-        super.onDestroy();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,11 +73,20 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         btnFitxar.setOnClickListener(ProfileTab.this);
         btnFitxar.setText("FITXAR");
 
-        Log.i("PROVA","SDGDAFGDFGDFGDFGDFg");
 
+        pref = getActivity().getSharedPreferences("MyPref", 0); //Use save state button
+        editor = pref.edit();
+
+
+        if (pref.getBoolean("Valor",false)) {
+            btnFitxar.setText("Acabar Jornada");
+            //btnFitxar.setBackgroundColor(R.color.green);
+            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+        }
 
         return view;
     }
+
 
 
 
@@ -132,7 +124,21 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             API api = new API(getContext());
             api.get_in(user.getUid(),user.getDisplayName());
 
+            editor.putBoolean("Valor",true);
+
+            editor.putString("key_name", "NOFITXAR"); // Storing string
+
+            editor.commit(); // commit changes
+
         }else{
+
+            editor.putBoolean("Valor",false);
+
+            editor.putString("key_name", "FITXAR"); // Storing string
+
+            editor.commit(); // commit changes
+
+
             FirebaseUser user =  mAuth.getCurrentUser();
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
                     .getUid());
