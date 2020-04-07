@@ -3,8 +3,10 @@ package com.example.timecontrol;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +47,8 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     private SharedPreferences pref;
 
     private SharedPreferences.Editor editor;
+
+    private LocationManager locationManager;
 
     public ProfileTab() {
         // Required empty public constructor
@@ -75,7 +81,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
 
         pref = getActivity().getSharedPreferences("MyPref", 0); //Use save state button
-        editor = pref.edit();
+         editor = pref.edit();
 
 
         if (pref.getBoolean("Valor",false)) {
@@ -84,10 +90,12 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }
 
+        locationManager=(LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
+
+
         return view;
     }
-
-
 
 
     private String datetime(){
@@ -104,7 +112,6 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View v) {
 

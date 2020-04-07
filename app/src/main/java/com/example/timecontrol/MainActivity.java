@@ -164,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
     }
 
 

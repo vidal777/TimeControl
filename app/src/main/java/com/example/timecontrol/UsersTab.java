@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,8 @@ public class UsersTab extends Fragment {
 
     ListView listView;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
 
     public UsersTab() {
         // Required empty public constructor
@@ -49,6 +53,23 @@ public class UsersTab extends Fragment {
         View view= inflater.inflate(R.layout.fragment_users_tab, container, false);
 
         listView=view.findViewById(R.id.listView);
+
+
+
+        swipeRefreshLayout=view.findViewById(R.id.swiperefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onResume();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                },2000);
+            }
+        });
 
         return view;
     }

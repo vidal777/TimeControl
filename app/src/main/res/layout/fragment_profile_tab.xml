@@ -18,6 +18,7 @@
         android:layout_marginBottom="336dp"
         android:background="@drawable/custom_button"
         android:enabled="true"
+        android:onClick="onClick"
         android:text="FITXAR"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

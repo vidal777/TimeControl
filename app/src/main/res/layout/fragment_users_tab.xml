@@ -13,6 +13,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="202dp"
@@ -33,13 +34,22 @@
                 android:layout_weight="1"
                 android:text="Minuts" />
 
+
+
         </LinearLayout>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+android:id="@+id/swiperefresh"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="20dp" />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 
