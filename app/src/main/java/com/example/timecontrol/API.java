@@ -37,7 +37,7 @@ public class API{
     }
 
     public void register_user(final String uid,final String type,final String name,final String email){
-        String URL= "http://192.168.1.56/android_app/register_user.php";
+        String URL= "http://192.168.1.92/android_app/register_user.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -72,7 +72,7 @@ public class API{
     }
 
     public void get_in(final String uid,final String name){
-        String URL= "http://192.168.1.56/android_app/get_in.php";
+        String URL= "http://192.168.1.92/android_app/get_in.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -106,7 +106,7 @@ public class API{
     }
 
     public void get_out(final String uid,final String name){
-        String URL= "http://192.168.1.56/android_app/get_out.php";
+        String URL= "http://192.168.1.92/android_app/get_out.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
