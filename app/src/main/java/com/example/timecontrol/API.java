@@ -71,7 +71,8 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
-    public void get_in(final String uid,final String name){
+    public void get_in(final String uid, final String name, final String address){
+        Log.i("ADDRESS", address + " ");
         String URL= "http://192.168.1.92/android_app/get_in.php";
 
 
@@ -96,8 +97,7 @@ public class API{
                 parametros.put("uid", uid);
                 parametros.put("get_in", timestamp());
                 parametros.put("name", name);
-                //parametros.put("get_out", timestamp());
-
+                parametros.put("address_in",address);
                 return parametros;
             }
         };
@@ -105,7 +105,7 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
-    public void get_out(final String uid,final String name){
+    public void get_out(final String uid,final String name,final String address){
         String URL= "http://192.168.1.92/android_app/get_out.php";
 
 
@@ -129,6 +129,7 @@ public class API{
                 parametros.put("uid", uid);
                 parametros.put("name", name);
                 parametros.put("get_out", timestamp());
+                parametros.put("address_out",address);
 
                 return parametros;
             }

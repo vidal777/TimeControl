@@ -135,30 +135,40 @@ public class UsersTab extends Fragment implements View.OnClickListener {
     private void JSON(String result){
 
         ArrayList<HashMap<String, String>> usersList= new ArrayList<>();
+        ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hores","Minuts"},new int[]{R.id.Name,R.id.Hores,R.id.Minuts});
         try {
             JSONObject jsonObj = new JSONObject(result);
             JSONArray users=jsonObj.getJSONArray("users");
 
-            //traversing through all the object
-            for (int i = 0; i < users.length(); i++) {
-                JSONObject c = users.getJSONObject(i);
-                String name=c.getString("name");
-                String hour=c.getString("hores");
-                String minuts=c.getString("minuts");
+            if (users.toString().equals("[]")){
+                FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",
+                        FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                listView.setAdapter(null);
 
-                //getting product object from json array
-                HashMap<String, String> user = new HashMap<>();
-                user.put("Hores",hour);
-                user.put("Name",name);
-                user.put("Minuts",minuts);
+            }else{
 
-                usersList.add(user);
+                //traversing through all the object
+                for (int i = 0; i < users.length(); i++) {
+                    JSONObject c = users.getJSONObject(i);
+                    String name=c.getString("name");
+                    String hour=c.getString("hores");
+                    String minuts=c.getString("minuts");
 
-                ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hores","Minuts"},new int[]{R.id.Name,R.id.Hores,R.id.Minuts});
-               // ArrayAdapter<HashMap<String, String>> adapter = new ArrayAdapter<HashMap<String, String>>(getContext(),R.layout.fragment_users_tab,usersList);
-                listView.setAdapter(adapter);
+                    //getting product object from json array
+                    HashMap<String, String> user = new HashMap<>();
+                    user.put("Hores",hour);
+                    user.put("Name",name);
+                    user.put("Minuts",minuts);
 
+                    usersList.add(user);
+
+
+                    listView.setAdapter(adapter);
+
+                }
             }
+
+
 
         }catch (JSONException e){
             e.printStackTrace();
@@ -233,7 +243,6 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                     String data_entrada=E_any+"-"+E_mes+"-"+E_dia;
                     String data_sortida=S_any+"-"+S_mes+"-"+S_dia;
                     URL= "http://192.168.1.92/android_app/get_data.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida;
-                    Log.i("URRRRRRRL",URL);
                     Call();
 
                 }

@@ -1,16 +1,23 @@
 package com.example.timecontrol;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -24,6 +31,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +42,8 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -48,7 +60,10 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     private SharedPreferences.Editor editor;
 
-    private LocationManager locationManager;
+    String address;
+
+
+    private FusedLocationProviderClient fusedLocationClient;
 
     public ProfileTab() {
         // Required empty public constructor
@@ -57,7 +72,6 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     @Override
     public void onStart() {
-        Log.e("DEBUG", "onStart");
         if (pref.getBoolean("Valor",false)) {
             btnFitxar.setText("Acabar Jornada");
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
@@ -90,11 +104,55 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }
 
-        locationManager=(LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET}
+                        ,10);
+            }
+        }
 
 
         return view;
+    }
+
+    private void location(final String valor,final FirebaseUser user ){
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            Log.i(location.getLongitude() + "" ,location.getLatitude()+" ");
+
+                            try{
+                                Geocoder geo = new Geocoder(getActivity(), Locale.getDefault());
+                                List<Address> addresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                if (addresses.isEmpty()) {
+                                }
+                                else {
+                                    if (addresses.size() > 0) {
+                                        address=addresses.get(0).getAddressLine(0);
+                                        if (valor=="FITXAR"){
+                                            API api = new API(getContext());
+                                            api.get_in(user.getUid(),user.getDisplayName(),address);
+                                        }else{
+                                            API api = new API(getContext());
+                                            api.get_out(user.getUid(),user.getDisplayName(),address);
+                                        }
+
+                                    }
+                                }
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
     }
 
 
@@ -116,7 +174,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if (btnFitxar.getText().toString()=="FITXAR"){
-            FirebaseUser user =  mAuth.getCurrentUser();
+            final FirebaseUser user =  mAuth.getCurrentUser();
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
                     .getUid());
             databaseReference.child("datetime_entrance " + datetime()).setValue(datetime());
@@ -128,14 +186,13 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             FancyToast.makeText(getContext(), "GET IN " + time(),
                     FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
 
-            API api = new API(getContext());
-            api.get_in(user.getUid(),user.getDisplayName());
-
             editor.putBoolean("Valor",true);
 
             editor.putString("key_name", "NOFITXAR"); // Storing string
 
             editor.commit(); // commit changes
+
+            location("FITXAR",user);
 
         }else{
 
@@ -157,8 +214,9 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             FancyToast.makeText(getContext(), "GET OUT " + time(),
                     FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
 
-            API api = new API(getContext());
-            api.get_out(user.getUid(),user.getDisplayName());
+            location("NOFITXAR",user);
+
+
         }
 
     }
