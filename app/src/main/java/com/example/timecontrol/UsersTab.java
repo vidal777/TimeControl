@@ -29,6 +29,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONArray;
@@ -38,6 +46,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import static com.android.volley.VolleyLog.TAG;
 
 
 /**
@@ -60,10 +70,31 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
     int E_dia,E_mes,E_any,S_dia,S_mes,S_any;
 
+    ArrayAdapter<String> adapterspinner;
+
 
 
     public UsersTab() {
         // Required empty public constructor
+    }
+
+    private void prova(){  //Know type_user ( Problems: need internet connection and you have to wait until ondatachange.)
+        FirebaseUser user =  FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference mref = FirebaseDatabase.getInstance().getReference("usuarios").child(user.getUid().toString()).child("type_user");
+        mref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String type_user = dataSnapshot.getValue(String.class);
+                Log.i("TYPE_USER",type_user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 
@@ -72,6 +103,10 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_users_tab, container, false);
+
+        //prova();
+
+
 
         URL= "http://192.168.1.92/android_app/get_data.php?position=0" ;
 
@@ -97,7 +132,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
         String [] opciones= {"Last Month","Last Week","Last Day"};
 
-        ArrayAdapter<String> adapterspinner= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,opciones);
+        adapterspinner= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,opciones);
 
         spinner.setAdapter(adapterspinner);
 
@@ -162,14 +197,9 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
                     usersList.add(user);
 
-
                     listView.setAdapter(adapter);
-
                 }
             }
-
-
-
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -247,6 +277,13 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
                 }
                 break;
+            case R.id.btnReset:
+                spinner.setSelection(0);
+                edtSortida.setText("");
+                edtEntrada.setText("");
+                URL= "http://192.168.1.92/android_app/get_data.php?position=0";
+                Call();
+
         }
     }
 }

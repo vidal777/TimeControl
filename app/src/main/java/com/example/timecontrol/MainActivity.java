@@ -3,7 +3,10 @@ package com.example.timecontrol;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
     private void signUp(String email, final String password,final String name){  //Sign Up Normal Mode
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -150,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             API api = new API(MainActivity.this);
                             api.register_user(task.getResult()
                                     .getUser().getUid(),type_user,name,task.getResult().getUser().getEmail());
-
-
 
                             transitionToMediaActivity();
 
@@ -231,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
         if(currentUser != null){
-            Log.i("dfgdfgdfgdfgdfgdfgdfg","sdfsdfsdfsdfsdfsdfsdfsdf");
             transitionToMediaActivity();
         }
     }
@@ -281,6 +282,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             databaseReference.child("name").setValue(task.getResult().getUser().getDisplayName());
                             databaseReference.child("date").setValue(datetime());
                             databaseReference.child("type_user").setValue(type_user);
+
+                            API api = new API(MainActivity.this);
+                            api.register_user(task.getResult()
+                                    .getUser().getUid(),type_user,task.getResult().getUser().getDisplayName(),task.getResult().getUser().getEmail());
 
                             transitionToMediaActivity();
 

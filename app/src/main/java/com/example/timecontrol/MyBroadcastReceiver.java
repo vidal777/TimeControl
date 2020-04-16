@@ -20,38 +20,32 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo info = wifiManager.getConnectionInfo ();
 
-        String ssid= info.getSSID().toString();
-        String name="MOVISTAR_VIDAL1";  //Wifi Name
-
+        String ssid= info.getSSID();
+        String name="Cisco01063";  //Wifi Name
 
 
         if (ssid.startsWith("\"")) { //Substract addition characters
             ssid = ssid.substring(1, ssid.length() - 1);
         }
 
+        Log.i("BROADCAST",ssid);
 
-//        ProfileTab.btnFitxar.setEnabled(true);
+       if (ProfileTab.btnFitxar!=null){
+           if( ssid.equals(name)){  //Enable button
+               if(!ProfileTab.btnFitxar.isEnabled()) {
+                   ProfileTab.btnFitxar.setEnabled(true);
+               }
 
-        /*
+           }else{  //disable button
+               if(ProfileTab.btnFitxar.isEnabled()){
+                   ProfileTab.btnFitxar.setEnabled(false);
+               }
+           }
 
-        if( ssid.equals(name)){  //Enable button
-            if(!ProfileTab.btnFitxar.isEnabled()) {
-                ProfileTab.btnFitxar.setEnabled(true);
-            }
-
-        }else{  //disable button
-            if(ProfileTab.btnFitxar.isEnabled()){
-
-                ProfileTab.btnFitxar.setEnabled(false);
-            }
-        }
-
-         */
-
-
+       }
 
         final PendingResult pendingResult = goAsync();
         Task asyncTask = new Task(pendingResult, intent);

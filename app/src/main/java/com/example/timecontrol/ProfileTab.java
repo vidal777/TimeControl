@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("Acabar Jornada");
+            btnFitxar.setText("Acabar");
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }
         super.onStart();
@@ -99,9 +100,11 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
 
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("Acabar Jornada");
+            btnFitxar.setText("Acabar");
             //btnFitxar.setBackgroundColor(R.color.green);
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+        }else{
+            btnFitxar.setBackgroundResource(R.drawable.custom_button);
         }
 
 
@@ -170,17 +173,26 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     }
 
+    private boolean isNetworkAvailable() {  //Check if there is connection
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
     @Override
     public void onClick(View v) {
 
-        if (btnFitxar.getText().toString()=="FITXAR"){
-            final FirebaseUser user =  mAuth.getCurrentUser();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
-                    .getUid());
-            databaseReference.child("datetime_entrance " + datetime()).setValue(datetime());
+        Boolean prova=isNetworkAvailable();
 
-            btnFitxar.setText("Acabar Jornada");
-            //btnFitxar.setBackgroundColor(R.color.green);
+        Log.i("PROVA",prova.toString());
+
+        if (btnFitxar.getText().toString()=="FITXAR"){
+
+            FirebaseUser user =  mAuth.getCurrentUser();
+
+            btnFitxar.setText("Acabar");
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
             FancyToast.makeText(getContext(), "GET IN " + time(),
@@ -196,17 +208,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
         }else{
 
-            editor.putBoolean("Valor",false);
-
-            editor.putString("key_name", "FITXAR"); // Storing string
-
-            editor.commit(); // commit changes
-
-
             FirebaseUser user =  mAuth.getCurrentUser();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("horarios").child(user
-                    .getUid());
-            databaseReference.child("datetime_exit " + datetime()).setValue(datetime());
 
             btnFitxar.setText("FITXAR");
             btnFitxar.setBackgroundResource(R.drawable.custom_button);
@@ -214,8 +216,13 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             FancyToast.makeText(getContext(), "GET OUT " + time(),
                     FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
 
-            location("NOFITXAR",user);
+            editor.putBoolean("Valor",false);
 
+            editor.putString("key_name", "FITXAR"); // Storing string
+
+            editor.commit(); // commit changes
+
+            location("NOFITXAR",user);
 
         }
 

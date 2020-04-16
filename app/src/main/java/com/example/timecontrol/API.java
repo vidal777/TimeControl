@@ -50,9 +50,6 @@ public class API{
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "FAIL" + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                Log.i("EROOOOOR",error.getMessage());
-
             }
         })
         {
