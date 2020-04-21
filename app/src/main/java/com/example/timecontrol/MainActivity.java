@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +39,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -120,14 +122,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "createUser:success");
-
-                            FancyToast.makeText(MainActivity.this, "Authentication succes.",
-                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
-
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            //Set a display name to know who is in session.
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name)
                                     .build();
@@ -143,17 +141,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     });
 
 
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(task.getResult()
-                                    .getUser().getUid());
-                            databaseReference.child("email").setValue(task.getResult().getUser().getEmail());
-                            databaseReference.child("name").setValue(name);
-                            databaseReference.child("date").setValue(datetime());
-                            databaseReference.child("type_user").setValue(type_user);
+                            //Save data to Firebase
+                            HashMap<Object,String> hashMap= new HashMap<>();
 
+                            hashMap.put("email",task.getResult().getUser().getEmail());
+                            hashMap.put("name",name);
+                            hashMap.put("date",datetime());
+                            hashMap.put("type_user",type_user);
+                            hashMap.put("image","");
+                            hashMap.put("cover","");
 
+                            FirebaseDatabase database=FirebaseDatabase.getInstance();
+
+                            DatabaseReference reference=database.getReference("usuarios");
+
+                            reference.child(user.getUid()).setValue(hashMap);
+
+                            //Save data to table users mysql
                             API api = new API(MainActivity.this);
                             api.register_user(task.getResult()
                                     .getUser().getUid(),type_user,name,task.getResult().getUser().getEmail());
+
+                            FancyToast.makeText(MainActivity.this, "Authentication succes.",
+                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
                             transitionToMediaActivity();
 
@@ -180,17 +190,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSign:
-                if (type_user!=null){
-                    if (edtEmail.getText().toString().trim().length() > 0 && edtPass.getText().toString().trim().length() > 0 && edtName.getText().toString().trim().length() > 0){
-                        signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
-                    }else{
-                        FancyToast.makeText(MainActivity.this, "Some gaps in blank",
-                                FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
-
+                String email= edtEmail.getText().toString().trim();
+                String password= edtPass.getText().toString().trim();
+                String name= edtName.getText().toString().trim();
+                if(name.length()<1){
+                    edtName.setError("Name can't be blank");
+                    edtName.setFocusable(true);
+                }
+                else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    edtEmail.setError("Invalid Email");
+                    edtEmail.setFocusable(true);
+                }else if(password.length()<6){
+                    edtPass.setError("Password length at least 6 characters");
+                    edtPass.setFocusable(true);
+                }else{
+                    if (type_user!=null){
+                            signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
+                    }else {
+                        FancyToast.makeText(MainActivity.this, "Need type user.",
+                                FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
                     }
-                }else {
-                    FancyToast.makeText(MainActivity.this, "Need type user.",
-                            FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
                 }
 
                 break;
@@ -270,22 +289,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FancyToast.makeText(MainActivity.this, "LogIn succes.",
-                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
+                            FirebaseUser user=mAuth.getCurrentUser();
+                            HashMap<Object,String> hashMap= new HashMap<>();
 
-                            FirebaseUser user =  mAuth.getCurrentUser();
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(task.getResult()
-                                    .getUser().getUid());
-                            databaseReference.child("email").setValue(task.getResult().getUser().getEmail());
-                            databaseReference.child("name").setValue(task.getResult().getUser().getDisplayName());
-                            databaseReference.child("date").setValue(datetime());
-                            databaseReference.child("type_user").setValue(type_user);
+                            hashMap.put("email",task.getResult().getUser().getEmail());
+                            hashMap.put("name",task.getResult().getUser().getDisplayName());
+                            hashMap.put("date",datetime());
+                            hashMap.put("type_user",type_user);
+                            hashMap.put("image","");
+
+                            FirebaseDatabase database=FirebaseDatabase.getInstance();
+
+                            DatabaseReference reference=database.getReference("usuarios");
+
+                            reference.child(user.getUid()).setValue(hashMap);
 
                             API api = new API(MainActivity.this);
                             api.register_user(task.getResult()
                                     .getUser().getUid(),type_user,task.getResult().getUser().getDisplayName(),task.getResult().getUser().getEmail());
+
+                            FancyToast.makeText(MainActivity.this, "LogIn succes.",
+                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
                             transitionToMediaActivity();
 

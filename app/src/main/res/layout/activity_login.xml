@@ -38,6 +38,18 @@
         android:inputType="none|textPassword" />
 
     <Button
+        android:id="@+id/btnForgot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="Forgot your password?" />
+
+    <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,4 +70,5 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="15dp"
         tools:ignore="SpUsage" />
+
 </LinearLayout>

@@ -58,12 +58,15 @@ public class MainMedia extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
 
-
+/*
         br = new MyBroadcastReceiver();
         filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(br, filter);
+
+
+ */
 
 
 
@@ -110,7 +113,7 @@ public class MainMedia extends AppCompatActivity {
     }
 
 
-
+    /*
     protected void onStart() { //Claim the location permission
         super.onStart();
         //Assume you want to read the SSID when the activity is started
@@ -141,6 +144,8 @@ public class MainMedia extends AppCompatActivity {
             }
         }
     }
+
+     */
 
 
 }

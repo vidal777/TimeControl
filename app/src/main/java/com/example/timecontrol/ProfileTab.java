@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -74,7 +75,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("Acabar");
+            btnFitxar.setText("ACABAR");
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }
         super.onStart();
@@ -82,6 +83,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,8 +101,9 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
          editor = pref.edit();
 
 
+
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("Acabar");
+            btnFitxar.setText("ACABAR");
             //btnFitxar.setBackgroundColor(R.color.green);
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }else{
@@ -192,7 +195,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
             FirebaseUser user =  mAuth.getCurrentUser();
 
-            btnFitxar.setText("Acabar");
+            btnFitxar.setText("ACABAR");
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
             FancyToast.makeText(getContext(), "GET IN " + time(),

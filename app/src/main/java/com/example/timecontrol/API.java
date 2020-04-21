@@ -135,6 +135,36 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
+    public void change_data(final String uid,final String name){
+        String URL= "http://192.168.1.92/android_app/change_data.php";
+
+
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("DEBUG","EXIT");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("DEBUG","FAIL");
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("uid", uid);
+                parametros.put("name", name);
+                return parametros;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+    }
+
 
 
     private String datetime(){

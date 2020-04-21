@@ -20,7 +20,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtEmail2,edtPass2;
-    private Button btnLogin,btnLog2;
+    private Button btnLogin,btnLog2,btnForgot;
     private FirebaseAuth mAuth;
 
     @Override
@@ -32,9 +32,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edtPass2=findViewById(R.id.edtPass2);
         btnLogin=findViewById(R.id.btnLogin);
         btnLog2=findViewById(R.id.btnLog2);
+        btnForgot=findViewById(R.id.btnForgot);
 
         btnLogin.setOnClickListener(this);
         btnLog2.setOnClickListener(this);
+        btnForgot.setOnClickListener(this);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -76,10 +78,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 LogIn(edtEmail2.getText().toString(), edtPass2.getText().toString());
                 break;
             case R.id.btnLog2:
-                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
                 break;
+            case R.id.btnForgot:
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+
         }
 
     }
