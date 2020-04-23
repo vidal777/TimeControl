@@ -104,7 +104,6 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
         if (pref.getBoolean("Valor",false)) {
             btnFitxar.setText("ACABAR");
-            //btnFitxar.setBackgroundColor(R.color.green);
             btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
         }else{
             btnFitxar.setBackgroundResource(R.drawable.custom_button);

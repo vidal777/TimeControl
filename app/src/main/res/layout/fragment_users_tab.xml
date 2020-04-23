@@ -24,9 +24,10 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="202dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Name"
+            android:layout_weight="1"
+            android:text="Get In"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <TextView
@@ -34,16 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Hores"
+            android:text="Get Out"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Minuts"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 
     </LinearLayout>
@@ -80,13 +74,12 @@
             android:layout_weight="1"
             android:text="Sortida" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:insetRight="10dp"
-            android:text="OK" />
+            android:src="@drawable/ic_arrow"
+            android:insetRight="10dp" />
 
     </LinearLayout>
 
@@ -115,15 +108,16 @@
             android:inputType="textPersonName"
             android:layout_weight="1"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:insetLeft="0dp"
             android:insetRight="10dp"
-            android:text="Res" />
+            android:src="@drawable/ic_reset" />
 
     </LinearLayout>
+
 
 
 </FrameLayout>

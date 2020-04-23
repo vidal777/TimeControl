@@ -1,7 +1,13 @@
 package com.example.timecontrol;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -18,17 +24,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,9 +54,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -55,6 +70,8 @@ import static com.android.volley.VolleyLog.TAG;
  */
 public class UsersTab extends Fragment implements View.OnClickListener {
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
 
     ListView listView;
 
@@ -62,62 +79,74 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
     private Spinner spinner;
 
-    String URL;
+    String URL,uid;
 
-    Button btnEntrada,btnSortida,btnOk,btnReset;
+    Button btnEntrada, btnSortida;
+    ImageButton btnOk, btnReset;
 
-    TextView edtEntrada,edtSortida;
+    TextView edtEntrada, edtSortida;
 
-    int E_dia,E_mes,E_any,S_dia,S_mes,S_any;
+    int E_dia, E_mes, E_any, S_dia, S_mes, S_any;
 
     ArrayAdapter<String> adapterspinner;
 
+    ArrayAdapter<String> adapterspinner2;
+
+
+    ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
 
     public UsersTab() {
         // Required empty public constructor
     }
 
-    private void prova(){  //Know type_user ( Problems: need internet connection and you have to wait until ondatachange.)
-        FirebaseUser user =  FirebaseAuth.getInstance().getCurrentUser();
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
 
-        DatabaseReference mref = FirebaseDatabase.getInstance().getReference("usuarios").child(user.getUid().toString()).child("type_user");
-        mref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String type_user = dataSnapshot.getValue(String.class);
-                Log.i("TYPE_USER",type_user);
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
 
-            }
-        });
+        } catch (IOException ex) {
 
+            ex.printStackTrace();
+        }
+
+        return p1;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_users_tab, container, false);
-
-        //prova();
+        View view = inflater.inflate(R.layout.fragment_users_tab, container, false);
 
 
 
-        URL= "http://192.168.1.92/android_app/get_data.php?position=0" ;
+        firebaseAuth=FirebaseAuth.getInstance();
+        user=firebaseAuth.getCurrentUser();
+        uid=user.getUid();
 
 
-        btnEntrada=view.findViewById(R.id.btnEntrada);
-        btnSortida=view.findViewById(R.id.btnSortida);
-        btnOk=view.findViewById(R.id.btnOk);
-        btnReset=view.findViewById(R.id.btnReset);
+        URL = "http://192.168.1.92/android_app/get_data_user.php?position=0&uid=" + uid;
 
-        edtEntrada=view.findViewById(R.id.edtEntrada);
-        edtSortida=view.findViewById(R.id.edtSortida);
+
+        btnEntrada = view.findViewById(R.id.btnEntrada);
+        btnSortida = view.findViewById(R.id.btnSortida);
+        btnOk = view.findViewById(R.id.btnOk);
+        btnReset = view.findViewById(R.id.btnReset);
+
+        edtEntrada = view.findViewById(R.id.edtEntrada);
+        edtSortida = view.findViewById(R.id.edtSortida);
 
         btnEntrada.setOnClickListener(UsersTab.this);
         btnSortida.setOnClickListener(UsersTab.this);
@@ -125,21 +154,20 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         btnReset.setOnClickListener(UsersTab.this);
 
 
+        listView = view.findViewById(R.id.listView);
 
-        listView=view.findViewById(R.id.listView);
+        spinner = view.findViewById(R.id.spinner);
 
-        spinner=view.findViewById(R.id.spinner);
+        String[] opciones = {"Last Month", "Last Week", "Last Day"};
 
-        String [] opciones= {"Last Month","Last Week","Last Day"};
-
-        adapterspinner= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,opciones);
+        adapterspinner = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, opciones);
 
         spinner.setAdapter(adapterspinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL= "http://192.168.1.92/android_app/get_data.php?position=" + position;
+                URL = "http://192.168.1.92/android_app/get_data_user.php?position=" + position + "&uid=" + uid;
                 Call();
             }
 
@@ -150,57 +178,108 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
         });
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // Get the selected item text from ListView
+                HashMap<String, String> user = new HashMap<>();
+                user=userList.get(position);
+                Collection<String> values = user.values();
+                ArrayList<String> listOfValues = new ArrayList<String>(values);
+                final String address_in=listOfValues.get(1);
+                final String address_out=listOfValues.get(2);
+                // Display the selected item text on TextView
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Which address do you want to check?")
+                        .setIcon(R.drawable.ic_location)
+                        .setCancelable(false)
+                        .setPositiveButton("Address Out", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                searchLocation(address_out);
+                                //dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Address In", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //MyActivity.this.finish();
+                                searchLocation(address_in);
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.setCanceledOnTouchOutside(true);
+                alert.show();
+            }
+        });
+
         return view;
     }
 
-    private void Call(){
-        GetData(new VolleyCallback(){
+    private void searchLocation(String address) {
+
+        LatLng latLng=getLocationFromAddress(getActivity(),address);
+
+        Intent intent;
+        intent = new Intent(getActivity(),MapsActivity.class);
+
+        intent.putExtra("LatLng",latLng);
+        startActivity(intent);
+
+    }
+
+    private void Call() {
+        GetData(new AdminTab.VolleyCallback() {
             @Override
-            public void onSuccess(String result){
+            public void onSuccess(String result) {
                 JSON(result);
             }
         });
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Call();
     }
 
-    private void JSON(String result){
+    private void JSON(String result) {
 
-        ArrayList<HashMap<String, String>> usersList= new ArrayList<>();
-        ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hores","Minuts"},new int[]{R.id.Name,R.id.Hores,R.id.Minuts});
+        userList.clear();
+        ListAdapter adapter = new SimpleAdapter(getContext(), userList, R.layout.list_item_user, new String[]{"get_in", "get_out"}, new int[]{R.id.get_in, R.id.get_out});
         try {
             JSONObject jsonObj = new JSONObject(result);
-            JSONArray users=jsonObj.getJSONArray("users");
+            JSONArray users = jsonObj.getJSONArray("users");
 
-            if (users.toString().equals("[]")){
+            if (users.toString().equals("[]")) {
                 FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",
-                        FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
                 listView.setAdapter(null);
 
-            }else{
+            } else {
 
                 //traversing through all the object
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject c = users.getJSONObject(i);
-                    String name=c.getString("name");
-                    String hour=c.getString("hores");
-                    String minuts=c.getString("minuts");
+                    String get_in = c.getString("get_in");
+                    String get_out = c.getString("get_out");
+                    String address_in = c.getString("address_in");
+                    String address_out = c.getString("address_out");
 
                     //getting product object from json array
                     HashMap<String, String> user = new HashMap<>();
-                    user.put("Hores",hour);
-                    user.put("Name",name);
-                    user.put("Minuts",minuts);
 
-                    usersList.add(user);
+                    user.put("get_in", get_in);
+                    user.put("get_out", get_out);
+                    user.put("address_in",address_in);
+                    user.put("address_out",address_out);
+
+                    userList.add(user);
 
                     listView.setAdapter(adapter);
                 }
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -211,7 +290,8 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
         void onSuccess(String string);
     }
-    private void GetData(final VolleyCallback callBack){
+
+    private void GetData(final AdminTab.VolleyCallback callBack) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -234,45 +314,45 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnEntrada:
-                final Calendar c= Calendar.getInstance();
+                final Calendar c = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtEntrada.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
-                        E_dia=dayOfMonth;
-                        E_mes=monthOfYear+1;
-                        E_any=year;
+                        edtEntrada.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        E_dia = dayOfMonth;
+                        E_mes = monthOfYear + 1;
+                        E_any = year;
                     }
-                },E_dia,E_mes,E_any);
+                }, E_dia, E_mes, E_any);
                 datePickerDialog.show();
 
                 break;
             case R.id.btnSortida:
-                final Calendar d= Calendar.getInstance();
+                final Calendar d = Calendar.getInstance();
 
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtSortida.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
-                        S_dia=dayOfMonth;
-                        S_mes=monthOfYear+1;
-                        S_any=year;
+                        edtSortida.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        S_dia = dayOfMonth;
+                        S_mes = monthOfYear + 1;
+                        S_any = year;
                     }
-                },S_dia,S_mes,S_any);
+                }, S_dia, S_mes, S_any);
                 datePickerDialog2.show();
 
                 break;
             case R.id.btnOk:
-                if (edtEntrada.getText().toString().matches("") && edtSortida.getText().toString().matches("")){
+                if (edtEntrada.getText().toString().matches("") && edtSortida.getText().toString().matches("")) {
                     FancyToast.makeText(getContext(), "Necessita insertar data",
-                            FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
+                            FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
 
-                }else{
-                    String data_entrada=E_any+"-"+E_mes+"-"+E_dia;
-                    String data_sortida=S_any+"-"+S_mes+"-"+S_dia;
-                    URL= "http://192.168.1.92/android_app/get_data.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida;
+                } else {
+                    String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
+                    String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
+                    URL = "http://192.168.1.92/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
                     Call();
 
                 }
@@ -281,7 +361,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 edtSortida.setText("");
                 edtEntrada.setText("");
-                URL= "http://192.168.1.92/android_app/get_data.php?position=0";
+                URL = "http://192.168.1.92/android_app/get_data_user.php?position=0&uid=" + uid;
                 Call();
 
         }

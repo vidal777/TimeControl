@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 
 public class TabAdapter extends FragmentPagerAdapter {
+    String user_type="Admin";
 
 
     public TabAdapter(@NonNull FragmentManager fm) {
@@ -22,8 +23,13 @@ public class TabAdapter extends FragmentPagerAdapter {
                 ProfileTab profileTab = new ProfileTab();
                 return profileTab;
             case 1:
-                UsersTab usersTab=new UsersTab();
-                return usersTab;
+                if (user_type=="User"){
+                    UsersTab usersTab=new UsersTab();
+                    return usersTab;
+                }else{
+                    AdminTab adminTab=new AdminTab();
+                    return adminTab;
+                }
             case 2:
                 SettingsTab settingsTab=new SettingsTab();
                 return settingsTab;
@@ -45,7 +51,8 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Profile";
             case 1:
-                return "Users";
+                if (user_type=="User") return "Users";
+                else return "Admin";
             case 2:
                 return "Settings";
             default:
