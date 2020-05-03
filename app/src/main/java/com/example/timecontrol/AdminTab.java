@@ -4,6 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.icu.util.ULocale;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -31,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,9 +50,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class AdminTab extends Fragment implements View.OnClickListener {
@@ -55,7 +63,6 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
     ListView listView;
 
-    SwipeRefreshLayout swipeRefreshLayout;
 
     private Spinner spinner;
 
@@ -70,41 +77,21 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
     ArrayAdapter<String> adapterspinner;
 
-    ArrayAdapter<String> adapterspinner2;
-
-    FloatingActionButton location;
 
     ArrayList<HashMap<String, String>> usersList= new ArrayList<>();
 
-    String type_user;
 
+    ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+
+    int Position=0;
+    int day,month,year;
 
 
     public AdminTab() {
         // Required empty public constructor
     }
 
-    private String prova(){  //Know type_user ( Problems: need internet connection and you have to wait until ondatachange.)
 
-        FirebaseUser user =  FirebaseAuth.getInstance().getCurrentUser();
-
-        DatabaseReference mref = FirebaseDatabase.getInstance().getReference("usuarios").child(user.getUid().toString()).child("type_user");
-        mref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                type_user = dataSnapshot.getValue(String.class);
-                Log.i("TYPE_USER",type_user);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        return type_user;
-
-    }
 
 
     @Override
@@ -113,7 +100,6 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin_tab, container, false);
 
-        Log.i("PROVA",prova()+ "");
 
         URL= "http://192.168.1.92/android_app/get_data_admin.php?position=0" ;
 
@@ -130,7 +116,6 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         btnSortida.setOnClickListener(AdminTab.this);
         btnOk.setOnClickListener(AdminTab.this);
         btnReset.setOnClickListener(AdminTab.this);
-        location=view.findViewById(R.id.location);
 
 
 
@@ -147,6 +132,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Position=position;
                 URL= "http://192.168.1.92/android_app/get_data_admin.php?position=" + position;
                 Call();
             }
@@ -163,43 +149,101 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the selected item text from ListView
-                searchLocation();
+                HashMap<String, String> user = new HashMap<>();
+                user=usersList.get(position);
+                Collection<String> values = user.values();
+                ArrayList<String> listOfValues = new ArrayList<String>(values);
+                String uid=listOfValues.get(0);
+
+                //searchLocation();
+                URL = "http://192.168.1.92/android_app/get_data_user.php?position=" + Position + "&uid=" + uid;
+                Call_user();
             }
         });
 
         return view;
     }
-    private void searchLocation(){
-        final AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
-        builder.setTitle("Select User and Date");
-        builder.setMessage("prova")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(),"You clicked Yes !!",Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(),"You clicked No !!",Toast.LENGTH_SHORT).show();
+    private void Create_view(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setTitle("Select One Name:");
+
+        ListAdapter adapter = new SimpleAdapter(getContext(), userList, R.layout.list_item_user, new String[]{"get_in", "get_out"}, new int[]{R.id.get_in, R.id.get_out});
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HashMap<String, String> user = new HashMap<>();
+                user=userList.get(which);
+                Collection<String> values = user.values();
+                ArrayList<String> listOfValues = new ArrayList<String>(values);
+                final String address_in=listOfValues.get(1);
+                final String address_out=listOfValues.get(2);
+                //String strName = arrayAdapter.getItem(which);
+                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                builderInner.setTitle("Your Selected Item is");
+                builderInner.setPositiveButton("Address Out", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        searchLocation(address_out);
                     }
                 });
-    /*
-        LinearLayout linearLayout= new LinearLayout(getActivity());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setPadding(10,10,10,10);
+                builderInner.setNegativeButton("Address In", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        searchLocation(address_in);
+                    }
+                });
+                AlertDialog alert = builderInner.create();
+                alert.setCanceledOnTouchOutside(true);
+                alert.show();
+            }
+        });
+        AlertDialog alert = builderSingle.create();
+        alert.setCanceledOnTouchOutside(true);
+        alert.show();
+    }
 
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
 
-        final DatePicker datePicker=new DatePicker(getActivity());
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
 
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
 
-        linearLayout.addView(datePicker);
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
 
+        } catch (IOException ex) {
 
-        builder.setView(linearLayout);
+            ex.printStackTrace();
+        }
 
-     */
+        return p1;
+    }
 
-        builder.create().show();
+    private void searchLocation(String address) {
+
+        LatLng latLng=getLocationFromAddress(getActivity(),address);
+
+        Intent intent;
+        intent = new Intent(getActivity(),MapsActivity.class);
+
+        intent.putExtra("LatLng",latLng);
+        startActivity(intent);
+
     }
 
     private void Call(){
@@ -211,9 +255,61 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         });
     }
 
+    private void Call_user(){
+        GetData(new AdminTab.VolleyCallback(){
+            @Override
+            public void onSuccess(String result){
+                JSON_user(result);
+            }
+        });
+    }
+
+
+
+    private void JSON_user(String result) {
+        Log.i("RESULTS",result);
+        userList.clear();
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+            JSONArray users = jsonObj.getJSONArray("users");
+
+            if (users.toString().equals("[]")) {
+                FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",
+                        FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
+                //listView.setAdapter(null);
+
+            } else {
+
+                //traversing through all the object
+                for (int i = 0; i < users.length(); i++) {
+                    JSONObject c = users.getJSONObject(i);
+                    String get_in = c.getString("get_in");
+                    String get_out = c.getString("get_out");
+                    String address_in = c.getString("address_in");
+                    String address_out = c.getString("address_out");
+
+                    //getting product object from json array
+                    HashMap<String, String> user = new HashMap<>();
+
+                    user.put("get_in", get_in);
+                    user.put("get_out", get_out);
+                    user.put("address_in",address_in);
+                    user.put("address_out",address_out);
+
+                    userList.add(user);
+
+                }
+                    Create_view();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void onResume(){
         super.onResume();
-        Call();
+        //Call();
     }
 
     private void JSON(String result){
@@ -234,12 +330,14 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 //traversing through all the object
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject c = users.getJSONObject(i);
+                    String uid=c.getString("uid");
                     String name=c.getString("name");
                     String hour=c.getString("hores");
                     String minuts=c.getString("minuts");
 
                     //getting product object from json array
                     HashMap<String, String> user = new HashMap<>();
+                    user.put("Uid",uid);
                     user.put("Hores",hour);
                     user.put("Name",name);
                     user.put("Minuts",minuts);
@@ -284,9 +382,14 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+        final Calendar c = Calendar.getInstance();
+        year=c.get(Calendar.YEAR);
+        month=c.get(Calendar.MONTH);
+        day=c.get(Calendar.DAY_OF_MONTH);
+
         switch (v.getId()){
             case R.id.btnEntrada:
-                final Calendar c= Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -295,13 +398,11 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                         E_mes=monthOfYear+1;
                         E_any=year;
                     }
-                },E_dia,E_mes,E_any);
+                },year,month,day);
                 datePickerDialog.show();
 
                 break;
             case R.id.btnSortida:
-                final Calendar d= Calendar.getInstance();
-
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -310,7 +411,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                         S_mes=monthOfYear+1;
                         S_any=year;
                     }
-                },S_dia,S_mes,S_any);
+                },year,month,day);
                 datePickerDialog2.show();
 
                 break;

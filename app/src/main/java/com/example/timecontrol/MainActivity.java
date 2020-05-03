@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String type_user;
 
+    public static SharedPreferences prefe;
+
+    public static SharedPreferences.Editor editore;
 
 
     @Override
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        prefe = getApplicationContext().getSharedPreferences("User", 0); //Use save state button
+        editore = prefe.edit();
 
 
         edtEmail = findViewById(R.id.edtEmail);
@@ -102,17 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     type_user="User";
                     edtCode.setVisibility(View.INVISIBLE);
                 }
-
             }
         });
-
-
-
-
-
     }
-
-
 
 
     private void signUp(String email, final String password,final String name){  //Sign Up Normal Mode
@@ -150,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             hashMap.put("type_user",type_user);
                             hashMap.put("image","");
                             hashMap.put("cover","");
+
+                            editore.putString("User",type_user);
+                            editore.commit();
 
                             FirebaseDatabase database=FirebaseDatabase.getInstance();
 
@@ -340,9 +342,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
         finish();
     }
-
-
-
-
-
 }

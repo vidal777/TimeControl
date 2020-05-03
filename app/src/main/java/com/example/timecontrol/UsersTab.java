@@ -61,6 +61,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -75,7 +76,6 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
     ListView listView;
 
-    SwipeRefreshLayout swipeRefreshLayout;
 
     private Spinner spinner;
 
@@ -84,16 +84,16 @@ public class UsersTab extends Fragment implements View.OnClickListener {
     Button btnEntrada, btnSortida;
     ImageButton btnOk, btnReset;
 
-    TextView edtEntrada, edtSortida;
 
     int E_dia, E_mes, E_any, S_dia, S_mes, S_any;
 
     ArrayAdapter<String> adapterspinner;
 
-    ArrayAdapter<String> adapterspinner2;
+
 
 
     ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+    int day,month,year;
 
 
     public UsersTab() {
@@ -131,7 +131,6 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_users_tab, container, false);
 
 
-
         firebaseAuth=FirebaseAuth.getInstance();
         user=firebaseAuth.getCurrentUser();
         uid=user.getUid();
@@ -145,13 +144,11 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         btnOk = view.findViewById(R.id.btnOk);
         btnReset = view.findViewById(R.id.btnReset);
 
-        edtEntrada = view.findViewById(R.id.edtEntrada);
-        edtSortida = view.findViewById(R.id.edtSortida);
-
         btnEntrada.setOnClickListener(UsersTab.this);
         btnSortida.setOnClickListener(UsersTab.this);
         btnOk.setOnClickListener(UsersTab.this);
         btnReset.setOnClickListener(UsersTab.this);
+
 
 
         listView = view.findViewById(R.id.listView);
@@ -214,6 +211,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
             }
         });
 
+
         return view;
     }
 
@@ -230,7 +228,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
     }
 
     private void Call() {
-        GetData(new AdminTab.VolleyCallback() {
+        GetData(new UsersTab.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
                 JSON(result);
@@ -244,7 +242,6 @@ public class UsersTab extends Fragment implements View.OnClickListener {
     }
 
     private void JSON(String result) {
-
         userList.clear();
         ListAdapter adapter = new SimpleAdapter(getContext(), userList, R.layout.list_item_user, new String[]{"get_in", "get_out"}, new int[]{R.id.get_in, R.id.get_out});
         try {
@@ -291,7 +288,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         void onSuccess(String string);
     }
 
-    private void GetData(final AdminTab.VolleyCallback callBack) {
+    private void GetData(final UsersTab.VolleyCallback callBack) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -314,38 +311,43 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+        final Calendar c = Calendar.getInstance();
+        year=c.get(Calendar.YEAR);
+        month=c.get(Calendar.MONTH);
+        day=c.get(Calendar.DAY_OF_MONTH);
+
         switch (v.getId()) {
             case R.id.btnEntrada:
-                final Calendar c = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtEntrada.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        btnEntrada.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         E_dia = dayOfMonth;
                         E_mes = monthOfYear + 1;
                         E_any = year;
                     }
-                }, E_dia, E_mes, E_any);
+                }, year,month,day);
                 datePickerDialog.show();
+
+
 
                 break;
             case R.id.btnSortida:
-                final Calendar d = Calendar.getInstance();
-
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtSortida.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        btnSortida.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         S_dia = dayOfMonth;
                         S_mes = monthOfYear + 1;
                         S_any = year;
                     }
-                }, S_dia, S_mes, S_any);
+                }, year, month, day);
                 datePickerDialog2.show();
 
                 break;
             case R.id.btnOk:
-                if (edtEntrada.getText().toString().matches("") && edtSortida.getText().toString().matches("")) {
+                if (btnEntrada.getText().toString().matches("") && btnSortida.getText().toString().matches("")) {
                     FancyToast.makeText(getContext(), "Necessita insertar data",
                             FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
 
@@ -359,11 +361,12 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnReset:
                 spinner.setSelection(0);
-                edtSortida.setText("");
-                edtEntrada.setText("");
+                btnSortida.setText("");
+                btnEntrada.setText("");
                 URL = "http://192.168.1.92/android_app/get_data_user.php?position=0&uid=" + uid;
                 Call();
-
+                break;
         }
     }
+
 }

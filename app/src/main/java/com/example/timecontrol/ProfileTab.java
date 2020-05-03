@@ -36,6 +36,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -63,6 +64,8 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     private SharedPreferences.Editor editor;
 
     String address;
+
+
 
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -98,8 +101,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
 
         pref = getActivity().getSharedPreferences("MyPref", 0); //Use save state button
-         editor = pref.edit();
-
+        editor = pref.edit();
 
 
         if (pref.getBoolean("Valor",false)) {
@@ -186,47 +188,45 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        Boolean prova=isNetworkAvailable();
+        Boolean prova = isNetworkAvailable();
 
-        Log.i("PROVA",prova.toString());
+        switch (v.getId()) {
+            case R.id.btnFitxar:
+                if (btnFitxar.getText().toString() == "FITXAR") {
 
-        if (btnFitxar.getText().toString()=="FITXAR"){
+                    FirebaseUser user = mAuth.getCurrentUser();
 
-            FirebaseUser user =  mAuth.getCurrentUser();
+                    btnFitxar.setText("ACABAR");
+                    btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
 
-            btnFitxar.setText("ACABAR");
-            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+                    FancyToast.makeText(getContext(), "GET IN " + time(),
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
 
-            FancyToast.makeText(getContext(), "GET IN " + time(),
-                    FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                    editor.putBoolean("Valor", true);
 
-            editor.putBoolean("Valor",true);
+                    editor.commit(); // commit changes
 
-            editor.putString("key_name", "NOFITXAR"); // Storing string
+                    location("FITXAR", user);
 
-            editor.commit(); // commit changes
+                } else {
 
-            location("FITXAR",user);
+                    FirebaseUser user = mAuth.getCurrentUser();
 
-        }else{
+                    btnFitxar.setText("FITXAR");
+                    btnFitxar.setBackgroundResource(R.drawable.custom_button);
 
-            FirebaseUser user =  mAuth.getCurrentUser();
+                    FancyToast.makeText(getContext(), "GET OUT " + time(),
+                            FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
 
-            btnFitxar.setText("FITXAR");
-            btnFitxar.setBackgroundResource(R.drawable.custom_button);
+                    editor.putBoolean("Valor", false);
 
-            FancyToast.makeText(getContext(), "GET OUT " + time(),
-                    FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
 
-            editor.putBoolean("Valor",false);
+                    editor.commit(); // commit changes
 
-            editor.putString("key_name", "FITXAR"); // Storing string
+                    location("NOFITXAR", user);
 
-            editor.commit(); // commit changes
-
-            location("NOFITXAR",user);
-
+                }
+                break;
         }
-
     }
 }

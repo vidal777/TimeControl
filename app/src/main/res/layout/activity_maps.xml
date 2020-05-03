@@ -11,7 +11,7 @@
         android:id="@+id/Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryDark"
+        android:background="?attr/colorPrimary"
         android:theme="?attr/actionBarTheme">
 
         <TextView
@@ -25,6 +25,7 @@
 
         <ImageButton
             android:id="@+id/btnBack"
+            style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="back"

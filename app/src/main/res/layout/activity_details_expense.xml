@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="?attr/actionBarTheme">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Details Expense"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnBack3"
+            style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:scrollbarSize="4dp"
+            android:src="@drawable/ic_back"
+            android:visibility="visible"></ImageButton>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:drawableRight="@drawable/ic_event_black_24dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:backgroundTint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/txtValue"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:imeOptions="actionNext"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtConcept"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtComments"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:hint="No data"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="218dp"
+            android:layout_height="237dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:adjustViewBounds="true"
+            android:background="#4D030303"
+            android:cropToPadding="false"
+            android:scaleType="centerInside"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+    </LinearLayout>
+</LinearLayout>
+
+
+
+

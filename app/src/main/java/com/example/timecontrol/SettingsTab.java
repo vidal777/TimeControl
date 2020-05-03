@@ -346,7 +346,6 @@ public class SettingsTab extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.i("ASDFASDF",resultCode + "");
         if ( resultCode == RESULT_OK){
             if ( requestCode == IMAGE_PICK_GALLERY_CODE){
                 //image is picked from gallery, get uri of image

@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,13 +44,13 @@ public class API{
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, "Exit", Toast.LENGTH_SHORT).show();
+                Log.e("DEBUG","EXIT");
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "FAIL" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("DEBUG","FAIL");
             }
         })
         {
@@ -142,13 +143,15 @@ public class API{
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("DEBUG","EXIT");
+                FancyToast.makeText(context, "Updated",
+                        FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("DEBUG","FAIL");
+                FancyToast.makeText(context, "Fail Updated",
+                        FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
             }
         })
         {
@@ -157,6 +160,44 @@ public class API{
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("uid", uid);
                 parametros.put("name", name);
+                return parametros;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+    }
+
+    public void set_expense(final String uid,final String name,final String data,final int price,final String comments,final String concept,final String id){
+        String URL= "http://192.168.1.92/android_app/set_expense.php";
+
+
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FancyToast.makeText(context, "Expense Updated",
+                        FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                FancyToast.makeText(context, "Fail Update Expense",
+                        FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("uid", uid);
+                parametros.put("name", name);
+                parametros.put("data", data);
+                parametros.put("price", String.valueOf(price));
+                parametros.put("comments", comments);
+                parametros.put("concept", concept);
+                parametros.put("id",id);
+
                 return parametros;
             }
         };
