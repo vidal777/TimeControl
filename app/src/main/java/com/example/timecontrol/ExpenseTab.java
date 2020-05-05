@@ -96,7 +96,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
         user=firebaseAuth.getCurrentUser();
         uid=user.getUid();
 
-        URL="http://192.168.1.92/android_app/get_expense_user.php?position=0&uid=" + uid;
+        URL="http://192.168.1.71/android_app/get_expense_user.php?position=0&uid=" + uid;
         expense=view.findViewById(R.id.expense);
         listViewExpense=view.findViewById(R.id.listViewExpense);
         spinnerExpense=view.findViewById(R.id.spinnerExpense);
@@ -124,7 +124,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
         spinnerExpense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL = "http://192.168.1.92/android_app/get_expense_user.php?position=" + position + "&uid=" + uid;
+                URL = "http://192.168.1.71/android_app/get_expense_user.php?position=" + position + "&uid=" + uid;
                 Call_expense();
             }
 
@@ -144,24 +144,21 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 Collection<String> values = user.values();
                 ArrayList<String> listOfValues = new ArrayList<String>(values);
 
-                String concept=listOfValues.get(0);
-                String comments=listOfValues.get(1);
-                String price=listOfValues.get(2);
+                final String concept=listOfValues.get(0);
+                final String comments=listOfValues.get(1);
+                final String price=listOfValues.get(2);
                 String idPhoto=listOfValues.get(3);
-                String data=listOfValues.get(4);
-                Log.i("IDPHOT",idPhoto);
-                if (idPhoto.equals("null")){
-                    Log.i("PROVA","SFSDFSDFSDFSDF");
+                final String data=listOfValues.get(4);
+                if (idPhoto.isEmpty()){
                     showDialog(concept,price,data,comments,uri);
                 }else{
-                    Log.i("PROVA","sdfsdfsdfsdf");
                     StorageReference storageRef =
                             FirebaseStorage.getInstance().getReference();
                     storageRef.child("Expenses/"+idPhoto).getDownloadUrl()
                             .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    showDialog("prova","50","2002-04-30","qualsevol",uri);
+                                    showDialog(concept,price,data,comments,uri);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -174,6 +171,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
 
             }
         });
+
 
         return view;
     }
@@ -286,7 +284,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                     String date=c.getString("date");
                     String concept=c.getString("concept");
                     String price=c.getString("price");
-                    String id=c.getString("id");
+                    String idPhoto=c.getString("idPhoto");
                     String comments=c.getString("comments");
 
                     //getting product object from json array
@@ -294,7 +292,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                     user.put("Date",date);
                     user.put("Concept",concept);
                     user.put("Total",price);
-                    user.put("Id",id);
+                    user.put("idPhoto",idPhoto);
                     user.put("Comments",comments);
 
                     expensesList.add(user);
@@ -358,7 +356,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.92/android_app/get_expense_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+                    URL = "http://192.168.1.71/android_app/get_expense_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
                     Call_expense();
 
                 }
@@ -367,7 +365,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 spinnerExpense.setSelection(0);
                 btnDateEntrance.setText("");
                 btnDateExit.setText("");
-                URL = "http://192.168.1.92/android_app/get_expense_user.php?position=0&uid=" + uid;
+                URL = "http://192.168.1.71/android_app/get_expense_user.php?position=0&uid=" + uid;
                 Call_expense();
                 break;
 

@@ -71,7 +71,6 @@ public class AdminTab extends Fragment implements View.OnClickListener {
     Button btnEntrada,btnSortida;
     ImageButton btnOk,btnReset;
 
-    TextView edtEntrada,edtSortida;
 
     int E_dia,E_mes,E_any,S_dia,S_mes,S_any;
 
@@ -109,8 +108,6 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         btnOk=view.findViewById(R.id.btnOk);
         btnReset=view.findViewById(R.id.btnReset);
 
-        edtEntrada=view.findViewById(R.id.edtEntrada);
-        edtSortida=view.findViewById(R.id.edtSortida);
 
         btnEntrada.setOnClickListener(AdminTab.this);
         btnSortida.setOnClickListener(AdminTab.this);
@@ -393,7 +390,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtEntrada.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+                        btnEntrada.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
                         E_dia=dayOfMonth;
                         E_mes=monthOfYear+1;
                         E_any=year;
@@ -406,7 +403,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        edtSortida.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+                        btnSortida.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
                         S_dia=dayOfMonth;
                         S_mes=monthOfYear+1;
                         S_any=year;
@@ -416,7 +413,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.btnOk:
-                if (edtEntrada.getText().toString().matches("") && edtSortida.getText().toString().matches("")){
+                if (btnEntrada.getText().toString().matches("") && btnSortida.getText().toString().matches("")){
                     FancyToast.makeText(getContext(), "Necessita insertar data",
                             FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
 
@@ -430,8 +427,8 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnReset:
                 spinner.setSelection(0);
-                edtSortida.setText("");
-                edtEntrada.setText("");
+                btnSortida.setText("");
+                btnEntrada.setText("");
                 URL= "http://192.168.1.92/android_app/get_data_admin.php?position=0";
                 Call();
 

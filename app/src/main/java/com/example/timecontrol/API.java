@@ -38,7 +38,7 @@ public class API{
     }
 
     public void register_user(final String uid,final String type,final String name,final String email){
-        String URL= "http://192.168.1.92/android_app/register_user.php";
+        String URL= "http://192.168.1.71/android_app/register_user.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -71,7 +71,7 @@ public class API{
 
     public void get_in(final String uid, final String name, final String address){
         Log.i("ADDRESS", address + " ");
-        String URL= "http://192.168.1.92/android_app/get_in.php";
+        String URL= "http://192.168.1.71/android_app/get_in.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -104,7 +104,7 @@ public class API{
     }
 
     public void get_out(final String uid,final String name,final String address){
-        String URL= "http://192.168.1.92/android_app/get_out.php";
+        String URL= "http://192.168.1.71/android_app/get_out.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -137,7 +137,7 @@ public class API{
     }
 
     public void change_data(final String uid,final String name){
-        String URL= "http://192.168.1.92/android_app/change_data.php";
+        String URL= "http://192.168.1.71/android_app/change_data.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -169,7 +169,7 @@ public class API{
     }
 
     public void set_expense(final String uid,final String name,final String data,final int price,final String comments,final String concept,final String id){
-        String URL= "http://192.168.1.92/android_app/set_expense.php";
+        String URL= "http://192.168.1.71/android_app/set_expense.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -196,7 +196,7 @@ public class API{
                 parametros.put("price", String.valueOf(price));
                 parametros.put("comments", comments);
                 parametros.put("concept", concept);
-                parametros.put("id",id);
+                parametros.put("idPhoto",id);
 
                 return parametros;
             }

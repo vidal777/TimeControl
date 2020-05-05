@@ -199,16 +199,6 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    private boolean checkStoragePermission(){
-        boolean result= ContextCompat.checkSelfPermission(AddExpense.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
-    }
-
-    private void requestStoragePermission(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(storagePermissions,STORAGE_REQUEST_CODE);
-        }
-    }
 
     private boolean checkCameraPermission(){
         boolean result= ContextCompat.checkSelfPermission(AddExpense.this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);

@@ -3,8 +3,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ExpenseAdminTab">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/expense"
+        android:src="@drawable/ic_expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="19dp"
+        android:layout_gravity="bottom" />
 
+    <Spinner
+        android:id="@+id/spinnerExpense"
+        android:layout_width="match_parent"
+        android:layout_height="41dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDateEntrance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_event_black_24dp"
+            android:inputType="date"
+            android:insetLeft="3dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:backgroundTint="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnDateExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_event_black_24dp"
+            android:insetLeft="3dp"
+            android:inputType="date"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:backgroundTint="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:insetRight="10dp"
+            android:src="@drawable/ic_arrow" />
+
+        <ImageButton
+            android:layout_marginTop="2dp"
+            android:id="@+id/btnReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:insetRight="10dp"
+            android:src="@drawable/ic_reset" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:autoText="false"
+            android:freezesText="false"
+            android:paddingLeft="10dp"
+            android:text="Total"
+            android:textAllCaps="false"
+            android:textSize="30sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/totalSuma"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingRight="10dp"
+            android:text="0"
+            android:textAlignment="viewEnd"
+            android:textSize="30sp">
+
+        </TextView>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViewExpense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+    </ListView>
 
 </FrameLayout>

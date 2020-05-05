@@ -136,7 +136,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         uid=user.getUid();
 
 
-        URL = "http://192.168.1.92/android_app/get_data_user.php?position=0&uid=" + uid;
+        URL = "http://192.168.1.71/android_app/get_data_user.php?position=0&uid=" + uid;
 
 
         btnEntrada = view.findViewById(R.id.btnEntrada);
@@ -164,7 +164,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL = "http://192.168.1.92/android_app/get_data_user.php?position=" + position + "&uid=" + uid;
+                URL = "http://192.168.1.71/android_app/get_data_user.php?position=" + position + "&uid=" + uid;
                 Call();
             }
 
@@ -354,7 +354,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.92/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
                     Call();
 
                 }
@@ -363,7 +363,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 btnSortida.setText("");
                 btnEntrada.setText("");
-                URL = "http://192.168.1.92/android_app/get_data_user.php?position=0&uid=" + uid;
+                URL = "http://192.168.1.71/android_app/get_data_user.php?position=0&uid=" + uid;
                 Call();
                 break;
         }
