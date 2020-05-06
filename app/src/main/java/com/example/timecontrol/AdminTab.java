@@ -85,6 +85,8 @@ public class AdminTab extends Fragment implements View.OnClickListener {
     int Position=0;
     int day,month,year;
 
+    String data_entrada,data_sortida;
+
 
     public AdminTab() {
         // Required empty public constructor
@@ -100,7 +102,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         View view= inflater.inflate(R.layout.fragment_admin_tab, container, false);
 
 
-        URL= "http://192.168.1.92/android_app/get_data_admin.php?position=0" ;
+        URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0" ;
 
 
         btnEntrada=view.findViewById(R.id.btnEntrada);
@@ -130,7 +132,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Position=position;
-                URL= "http://192.168.1.92/android_app/get_data_admin.php?position=" + position;
+                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=" + position;
                 Call();
             }
 
@@ -152,8 +154,15 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 ArrayList<String> listOfValues = new ArrayList<String>(values);
                 String uid=listOfValues.get(0);
 
+
                 //searchLocation();
-                URL = "http://192.168.1.92/android_app/get_data_user.php?position=" + Position + "&uid=" + uid;
+                if (Position==3){
+                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+
+                }else{
+
+                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=" + Position + "&uid=" + uid; //Falla peruqe tenim que passar la data
+                }
                 Call_user();
             }
         });
@@ -418,9 +427,10 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                             FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
 
                 }else{
-                    String data_entrada=E_any+"-"+E_mes+"-"+E_dia;
-                    String data_sortida=S_any+"-"+S_mes+"-"+S_dia;
-                    URL= "http://192.168.1.92/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida;
+                    Position=3;
+                    data_entrada=E_any+"-"+E_mes+"-"+E_dia;
+                    data_sortida=S_any+"-"+S_mes+"-"+S_dia;
+                    URL= "http://192.168.1.71/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida;
                     Call();
 
                 }
@@ -429,7 +439,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 btnSortida.setText("");
                 btnEntrada.setText("");
-                URL= "http://192.168.1.92/android_app/get_data_admin.php?position=0";
+                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0";
                 Call();
 
         }

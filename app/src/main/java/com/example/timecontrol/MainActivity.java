@@ -272,14 +272,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-    // [END onactivityresult]
 
-    // [START auth_with_google]
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) { //Sign Up Google Mode
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-        //showProgressBar();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -288,6 +283,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                                Log.i("PROCA", "BANVIGUT");
+                            }
 
                             FirebaseUser user=mAuth.getCurrentUser();
                             HashMap<Object,String> hashMap= new HashMap<>();
