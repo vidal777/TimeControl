@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import static com.example.timecontrol.MainActivity.editore;
+import static com.example.timecontrol.SignActivity.editore;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

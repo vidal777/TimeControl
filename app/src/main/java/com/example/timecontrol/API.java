@@ -206,6 +206,42 @@ public class API{
 
     }
 
+    public void set_company(final String name,final String nameCompany,final String CIF,final String numberWorkers,final String email){
+        String URL= "http://192.168.1.71/android_app/set_company.php";
+
+
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FancyToast.makeText(context, "Company Updated",
+                        FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                FancyToast.makeText(context, "Fail Update Company",
+                        FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("name", name);
+                parametros.put("nameCompany", nameCompany);
+                parametros.put("CIF", CIF);
+                parametros.put("numberWorkers", numberWorkers);
+                parametros.put("email", email);
+
+                return parametros;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+    }
+
 
 
     private String datetime(){

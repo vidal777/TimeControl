@@ -7,111 +7,114 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="182dp"
-        android:layout_margin="25dp"
-        app:srcCompat="@mipmap/ic_launcher_logo_round" />
-
-    <EditText
-        android:id="@+id/edtName"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:ems="10"
-        android:hint="Enter name..."
-        android:inputType="textPersonName" />
+        android:text="Garantiza el registro diario de jornada"
+        android:textColor="#4CAF50"
+        android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/edtEmail"
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:ems="10"
-        android:hint="Enter email..."
-        android:inputType="none|textEmailAddress" />
+        app:boxStrokeColor="@color/colorPrimaryDark">
 
-    <EditText
-        android:id="@+id/edtPass"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:inputType="none|text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:ems="10"
-        android:hint="Enter password..."
-        android:inputType="none|textPassword" />
+        app:boxStrokeColor="@color/colorPrimaryDark">
 
-    <RadioGroup
-        android:id="@+id/rdGroup"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtNameCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre Empresa"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/colorPrimaryDark">
 
-        <RadioButton
-            android:id="@+id/rdUser"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtCIF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:text="User" />
+            android:hint="CIF"
+            android:inputType="none|text" />
 
-        <RadioButton
-            android:id="@+id/rdAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:text="Adim" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/edtCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Enter Code..."
-            android:inputType="textPersonName"
-            android:visibility="invisible" />
-    </RadioGroup>
-
-
-    <LinearLayout
-        android:id="@+id/LinearLayout1"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/colorPrimaryDark">
 
-        <Button
-            android:id="@+id/btnSign"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtNumberWorkers"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text=" SIGN IN"
-            android:textAlignment="center" />
+            android:hint="Numero empleados"
+            android:inputType="none|number" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/signInButton"
-            android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/colorPrimaryDark">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
-    </LinearLayout>
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <CheckBox
+        android:id="@+id/checkPolitic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
+        android:text="He leído y acepto el Aviso Legal y la Política de Privicidad." />
+
+    <CheckBox
+        android:id="@+id/checkConditions"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="He leído y acepto los Términos y Condiciones de uso. Condiciones Generales de Contratación." />
 
     <Button
-        android:id="@+id/btnLog2"
-        android:layout_width="fill_parent"
+        android:id="@+id/btnSend"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
-        android:background="@null"
-        android:focusable="auto"
-        android:text="Already a member? Log in"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="15dp"
-        tools:ignore="SpUsage" />
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Envia"
+        app:backgroundTint="#4CAF50" />
 
 </LinearLayout>

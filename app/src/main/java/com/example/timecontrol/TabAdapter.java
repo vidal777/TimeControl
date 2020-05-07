@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import static com.example.timecontrol.MainActivity.prefe;
+import static com.example.timecontrol.SignActivity.prefe;
 
 
 public class TabAdapter extends FragmentPagerAdapter {
