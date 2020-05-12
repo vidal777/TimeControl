@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 LogIn(edtEmail2.getText().toString(), edtPass2.getText().toString());
                 break;
             case R.id.btnLog2:
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignActivity.class));
                 finish();
                 break;
             case R.id.btnForgot:

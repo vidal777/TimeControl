@@ -25,6 +25,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+
         //set inits
         btnSend=findViewById(R.id.btnSend);
         edtName=findViewById(R.id.edtName);
@@ -76,22 +83,54 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkGaps()){
-                        API api = new API(MainActivity.this);
-                        api.set_company(name,namecompany,CIF,numberWorkers,email);
+                    checkCompany();
                 }
             }
         });
 
-
-
     }
+
+    private void checkCompany() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String URL= "http://192.168.1.71/android_app/check_company.php?CIF=" + CIF + "&namecompany=" + namecompany ;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("RESPONSE",response);
+                        response=response.trim();
+                        if(response.equals("Exists")){
+                            FancyToast.makeText(getApplicationContext(), "Company exists",
+                                    FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
+                        }else{
+                            API api = new API(MainActivity.this);
+                            api.set_company(name,namecompany,CIF,numberWorkers,email);
+
+                            FancyToast.makeText(getApplicationContext(), "Company Update",
+                                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
+
+                            Intent intent= new Intent(MainActivity.this,SignActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        FancyToast.makeText(getApplicationContext(), "Error on transaction",
+                                FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
+                    }
+                });
+        queue.add(stringRequest);
+    }
+
+
 
     private Boolean checkGaps() {
         Boolean check=true;
@@ -105,28 +144,38 @@ public class MainActivity extends AppCompatActivity {
             edtName.setError("Name can't be blank");
             edtName.setFocusable(true);
             check=false;
-        }else if(namecompany.length()<1){
+        }
+        if (namecompany.contains("'")){
+            edtNameCompany.setError("Only supports letters and numbers");
+            edtNameCompany.setFocusable(true);
+            check=false;
+        }
+        if(namecompany.length()<1){
             edtNameCompany.setError("Name can't be blank");
             edtNameCompany.setFocusable(true);
             check=false;
-        }else if (CIF.length()<9){
+        }
+        if (CIF.length()<9){
             edtCIF.setError("Incorrect CIF");
             edtCIF.setFocusable(true);
             check=false;
-        }else if(numberWorkers.length()<1){
+        }
+        if(numberWorkers.length()<1){
             edtNumberWorkers.setError("Name can't be blank");
             edtNumberWorkers.setFocusable(true);
             check=false;
         }
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             edtEmail.setError("Invalid Email");
             edtEmail.setFocusable(true);
             check=false;
-        }else if (!checkPolitic.isChecked()){
+        }
+        if (!checkPolitic.isChecked()){
             checkPolitic.setError("Need Permission");
             //checkPolitic.setFocusable(true);
             check=false;
-        }else if (!checkConditions.isChecked()){
+        }
+        if (!checkConditions.isChecked()){
             checkConditions.setError("Need Permission");
             //checkConditions.setFocusable(true);
             check=false;

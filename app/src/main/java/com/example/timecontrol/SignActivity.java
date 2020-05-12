@@ -15,12 +15,19 @@ import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,41 +53,38 @@ import java.util.HashMap;
 public class SignActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
-    private Button btnLogin, btnSign,btnLog;
-    private RadioGroup rdGroup;
-    private RadioButton rdUser,rdAdmin;
-    private EditText edtEmail, edtPass,edtName,edtCode;
+    private Button btnSign,btnLog,btnRegisterCompany;
+    private TextInputEditText edtEmail, edtPass,edtName,edtCode;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private String type_user;
 
     public static SharedPreferences prefe;
 
     public static SharedPreferences.Editor editore;
 
+    String name,email,code,password,type_user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign);
+
+        getSupportActionBar().hide();
 
         prefe = getApplicationContext().getSharedPreferences("User", 0); //Use save state button
         editore = prefe.edit();
 
-
+        btnRegisterCompany=findViewById(R.id.btnRegisterCompany);
         edtEmail = findViewById(R.id.edtEmail);
         edtPass = findViewById(R.id.edtPass);
         edtName = findViewById(R.id.edtName);
         edtCode=findViewById(R.id.edtCode);
-
-        rdAdmin=findViewById(R.id.rdAdmin);
-        rdUser=findViewById(R.id.rdUser);
-        rdGroup=findViewById(R.id.rdGroup);
-
         btnSign = findViewById(R.id.btnSign);
         btnLog=findViewById(R.id.btnLog2);
 
@@ -97,24 +102,13 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         btnSign.setOnClickListener(this);
         btnLog.setOnClickListener(this);
+        btnRegisterCompany.setOnClickListener(this);
         findViewById(R.id.signInButton).setOnClickListener(this);
 
-        rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId==R.id.rdAdmin){
-                    type_user="Admin";
-                    edtCode.setVisibility(View.VISIBLE);
-                }else{
-                    type_user="User";
-                    edtCode.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
 
-    private void signUp(String email, final String password,final String name){  //Sign Up Normal Mode
+    private void signUp(){  //Sign Up Normal Mode
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -162,7 +156,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                             //Save data to table users mysql
                             API api = new API(SignActivity.this);
                             api.register_user(task.getResult()
-                                    .getUser().getUid(),type_user,name,task.getResult().getUser().getEmail());
+                                    .getUser().getUid(),name,task.getResult().getUser().getEmail(),code);
 
                             FancyToast.makeText(SignActivity.this, "Authentication succes.",
                                     FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
@@ -183,34 +177,78 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void checkCode() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String URL= "http://192.168.1.71/android_app/check_code.php?code=" + code ;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("RESPONSE",response);
+                        response=response.trim();
+                        String[] arrOfStr = response.split("/", 2);
+
+                        if(response.equals("No Exists")){
+                            FancyToast.makeText(getApplicationContext(), "Code no exists",
+                                    FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
+                        }else{
+                            type_user=arrOfStr[0];
+                            code= arrOfStr[1];
+                            signUp();
+                        }
+
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        FancyToast.makeText(getApplicationContext(), "Error on transaction",
+                                FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
+                    }
+                });
+        queue.add(stringRequest);
+    }
+
+    private Boolean checkGaps(){
+        boolean mcheck=true;
+        email= edtEmail.getText().toString().trim();
+        password= edtPass.getText().toString().trim();
+        name= edtName.getText().toString().trim();
+        code= edtCode.getText().toString().trim();
+        if(name.length()<1){
+            edtName.setError("Name can't be blank");
+            edtName.setFocusable(true);
+            mcheck=false;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            edtEmail.setError("Invalid Email");
+            edtEmail.setFocusable(true);
+            mcheck=false;
+        }if(password.length()<6){
+            edtPass.setError("Password length at least 6 characters");
+            edtPass.setFocusable(true);
+            mcheck=false;
+
+        }
+        if (code.length()<13) {
+            edtCode.setError("Incorrect code");
+            edtCode.setFocusable(true);
+            mcheck=false;
+        }
+        return mcheck;
+    }
+
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSign:
-                String email= edtEmail.getText().toString().trim();
-                String password= edtPass.getText().toString().trim();
-                String name= edtName.getText().toString().trim();
-                if(name.length()<1){
-                    edtName.setError("Name can't be blank");
-                    edtName.setFocusable(true);
+                if (checkGaps()){
+                    checkCode();
                 }
-                else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    edtEmail.setError("Invalid Email");
-                    edtEmail.setFocusable(true);
-                }else if(password.length()<6){
-                    edtPass.setError("Password length at least 6 characters");
-                    edtPass.setFocusable(true);
-                }else{
-                    if (type_user!=null){
-                        signUp(edtEmail.getText().toString(), edtPass.getText().toString(),edtName.getText().toString());
-                    }else {
-                        FancyToast.makeText(SignActivity.this, "Need type user.",
-                                FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
-                    }
-                }
-
                 break;
             case R.id.signInButton:
                 if (type_user!=null){
@@ -223,6 +261,11 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLog2:
                 Intent intent=new Intent(SignActivity.this,LoginActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.btnRegisterCompany:
+                Intent mainActivity=new Intent(this,MainActivity.class);
+                startActivity(mainActivity);
+                //finish();
                 break;
         }
     }

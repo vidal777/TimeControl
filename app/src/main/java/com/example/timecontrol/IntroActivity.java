@@ -34,7 +34,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
         if(restorePrefData()){
-            Intent intent= new Intent(IntroActivity.this,MainActivity.class);
+            Intent intent= new Intent(IntroActivity.this,SignActivity.class);
             startActivity(intent);
             finish();
 
@@ -50,13 +50,13 @@ public class IntroActivity extends AppCompatActivity {
         //fill list screen
 
         final List<ScreenItem> mList= new ArrayList<>();
-        mList.add(new ScreenItem("Welcome TimeControl","",R.drawable.logo));
-        mList.add(new ScreenItem("Register Company","Primero de todo, se necessita dar de alta el número de empleados para poder acceder a TimeControl. Una vez establecido el plan de utilizacion" +
-                "tendremos que registrar los usuarios con los codigos que os hemos mandado",R.drawable.sing));
-        mList.add(new ScreenItem("TimeControl permite registar el inicio y finalizacion de la jornada laboral de manera simple. Solo tenemos que dar un click en el boton que encontraremos " +
-                "en el inicio de l'aplicacion","",R.drawable.time));
-        mList.add(new ScreenItem("TimeControl registra la localicacion del usuario cada vez que se realiza un fitxage de salida o entrada","",R.drawable.location));
-        mList.add(new ScreenItem("Por último, TimeControl permite al usuario añadir facturas y subir el tiquet","",R.drawable.dolar));
+        mList.add(new ScreenItem("Bienvenido TimeControl","",R.drawable.logo));
+        mList.add(new ScreenItem("Registrar Empresa","Primero de todo, se necessita dar de alta el número de empleados para poder acceder a TimeControl. Una vez establecido el plan de utilizacion" +
+                " tendremos que registrar los usuarios con los codigos que os hemos mandado por email",R.drawable.sing));
+        mList.add(new ScreenItem("Control Jornada Laboral","TimeControl permite registar el inicio y finalizacion de la jornada laboral de manera simple. Solo tenemos que dar un click en el boton que encontraremos " +
+                "en el inicio de l'aplicacion",R.drawable.time));
+        mList.add(new ScreenItem("Localització","TimeControl registra la localicacion del usuario cada vez que se realiza un fitxage de salida o entrada",R.drawable.location));
+        mList.add(new ScreenItem("Depesses","Por último, TimeControl permite al usuario añadir facturas y subir el tiquet",R.drawable.dolar));
 
         //setup viewpager
 
@@ -111,10 +111,9 @@ public class IntroActivity extends AppCompatActivity {
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(IntroActivity.this,MainActivity.class);
-                startActivity(intent);
-
                 savePrefsData();
+                Intent intent= new Intent(IntroActivity.this,SignActivity.class);
+                startActivity(intent);
                 finish();
 
             }

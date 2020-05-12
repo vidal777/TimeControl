@@ -31,7 +31,14 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".SignActivity" />
+
+        <activity android:name=".SignActivity" >
+
+
+
+
+        </activity>
+
         <activity android:name=".ExpenseAdminTab" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -61,6 +68,7 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
 
         </activity>
     </application>

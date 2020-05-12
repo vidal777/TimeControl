@@ -37,7 +37,7 @@ public class API{
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public void register_user(final String uid,final String type,final String name,final String email){
+    public void register_user(final String uid,final String name,final String email,final String code){
         String URL= "http://192.168.1.71/android_app/register_user.php";
 
 
@@ -59,9 +59,9 @@ public class API{
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
-                parametros.put("type", type);
                 parametros.put("name", name);
                 parametros.put("email", email);
+                parametros.put("code",code);
                 return parametros;
             }
         };

@@ -57,6 +57,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    String uidAdmin;
 
     FloatingActionButton expense;
 
@@ -94,9 +95,9 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
         firebaseAuth= FirebaseAuth.getInstance();
         user=firebaseAuth.getCurrentUser();
-        uid=user.getUid();
+        uidAdmin=user.getUid();
 
-        URL="http://192.168.1.71/android_app/get_expense_admin.php?position=0";
+        URL="http://192.168.1.71/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
         expense=view.findViewById(R.id.expense);
         listViewExpense=view.findViewById(R.id.listViewExpense);
         spinnerExpense=view.findViewById(R.id.spinnerExpense);
@@ -149,10 +150,9 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 final String price=listOfValues.get(2);
                 String idPhoto=listOfValues.get(3);
                 final String data=listOfValues.get(4);
-                Log.i("IDPHOT",idPhoto + " prova");
 
                 if (idPhoto.isEmpty()){
-                    showDialog(concept,price,data,comments,uri);
+                    showDialog(concept,price,data,comments,null);
                 }else{
                     StorageReference storageRef =
                             FirebaseStorage.getInstance().getReference();
@@ -170,9 +170,6 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                                 }
                             });
                 }
-
-
-
 
             }
         });
@@ -200,11 +197,9 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
         txtConcept.setText(concept);
         txtComments.setText(comments);
 
-        Log.i("IMAGEURI",imageuri + "");
 
 
-
-        if(!imageuri.equals("null")){
+        if(imageuri!=null){
             imageView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             Picasso.get().load(imageuri).rotate(90).into(imageView);
         }
@@ -284,6 +279,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 listViewExpense.setAdapter(null);
 
             }else{
+                Log.i("USERS",users.toString());
 
                 //traversing through all the object
                 for (int i = 0; i < users.length(); i++) {
@@ -312,7 +308,6 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
                 }
                 totalSuma.setText(suma + "");
-                Log.i("LLISTA",expensesList.toString());
             }
         }catch (JSONException e){
             e.printStackTrace();
@@ -366,7 +361,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.71/android_app/get_expense_admin.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida ;
+                    URL = "http://192.168.1.71/android_app/get_expense_admin.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
                     Call_expense();
 
                 }
@@ -375,7 +370,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 spinnerExpense.setSelection(0);
                 btnDateEntrance.setText("");
                 btnDateExit.setText("");
-                URL = "http://192.168.1.71/android_app/get_expense_admin.php?position=0";
+                URL="http://192.168.1.71/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
                 Call_expense();
                 break;
 

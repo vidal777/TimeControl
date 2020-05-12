@@ -150,7 +150,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 String idPhoto=listOfValues.get(3);
                 final String data=listOfValues.get(4);
                 if (idPhoto.isEmpty()){
-                    showDialog(concept,price,data,comments,uri);
+                    showDialog(concept,price,data,comments,null);
                 }else{
                     StorageReference storageRef =
                             FirebaseStorage.getInstance().getReference();

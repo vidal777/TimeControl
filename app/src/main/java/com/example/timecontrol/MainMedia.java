@@ -108,7 +108,7 @@ public class MainMedia extends AppCompatActivity {
     private void logout(){
         mAuth.signOut();
         finish();
-        Intent intent=new Intent(MainMedia.this,MainActivity.class);
+        Intent intent=new Intent(MainMedia.this,SignActivity.class);
         startActivity(intent);
     }
 

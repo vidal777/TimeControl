@@ -60,6 +60,10 @@ import java.util.List;
 
 public class AdminTab extends Fragment implements View.OnClickListener {
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    String uidAdmin;
+
 
     ListView listView;
 
@@ -101,8 +105,12 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin_tab, container, false);
 
+        firebaseAuth=FirebaseAuth.getInstance();
+        user=firebaseAuth.getCurrentUser();
+        uidAdmin=user.getUid();
 
-        URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0" ;
+
+        URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
 
 
         btnEntrada=view.findViewById(R.id.btnEntrada);
@@ -132,7 +140,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Position=position;
-                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=" + position;
+                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=" + position + "&uidAdmin=" + uidAdmin;
                 Call();
             }
 
@@ -315,11 +323,9 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
     public void onResume(){
         super.onResume();
-        //Call();
     }
 
     private void JSON(String result){
-
         usersList.clear();
         ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hores","Minuts"},new int[]{R.id.Name,R.id.Hores,R.id.Minuts});
         try {
@@ -430,7 +436,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                     Position=3;
                     data_entrada=E_any+"-"+E_mes+"-"+E_dia;
                     data_sortida=S_any+"-"+S_mes+"-"+S_dia;
-                    URL= "http://192.168.1.71/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida;
+                    URL= "http://192.168.1.71/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
                     Call();
 
                 }
@@ -439,7 +445,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 btnSortida.setText("");
                 btnEntrada.setText("");
-                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0";
+                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
                 Call();
 
         }
