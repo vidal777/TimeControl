@@ -56,9 +56,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnSign,btnLog,btnRegisterCompany;
     private TextInputEditText edtEmail, edtPass,edtName,edtCode;
     private static final String TAG = "GoogleActivity";
-    private static final int RC_SIGN_IN = 9001;
 
-    private GoogleSignInClient mGoogleSignInClient;
 
 
     public static SharedPreferences prefe;
@@ -71,11 +69,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign);
 
-        getSupportActionBar().hide();
 
         prefe = getApplicationContext().getSharedPreferences("User", 0); //Use save state button
         editore = prefe.edit();
@@ -88,22 +83,14 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         btnSign = findViewById(R.id.btnSign);
         btnLog=findViewById(R.id.btnLog2);
 
-        findViewById(R.id.signInButton).setOnClickListener(this);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mAuth = FirebaseAuth.getInstance();
 
         btnSign.setOnClickListener(this);
         btnLog.setOnClickListener(this);
         btnRegisterCompany.setOnClickListener(this);
-        findViewById(R.id.signInButton).setOnClickListener(this);
+
 
     }
 
@@ -142,7 +129,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                             hashMap.put("date",datetime());
                             hashMap.put("type_user",type_user);
                             hashMap.put("image","");
-                            hashMap.put("cover","");
 
                             editore.putString("User",type_user);
                             editore.commit();
@@ -250,14 +236,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                     checkCode();
                 }
                 break;
-            case R.id.signInButton:
-                if (type_user!=null){
-                    signIn();
-                }else {
-                    FancyToast.makeText(SignActivity.this, "Need type user.",
-                            FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
-                }
-                break;
             case R.id.btnLog2:
                 Intent intent=new Intent(SignActivity.this,LoginActivity.class);
                 startActivity(intent);
@@ -298,72 +276,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-            }
-        }
-    }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) { //Sign Up Google Mode
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
-                                Log.i("PROCA", "BANVIGUT");
-                            }
-
-                            FirebaseUser user=mAuth.getCurrentUser();
-                            HashMap<Object,String> hashMap= new HashMap<>();
-
-                            hashMap.put("email",task.getResult().getUser().getEmail());
-                            hashMap.put("name",task.getResult().getUser().getDisplayName());
-                            hashMap.put("date",datetime());
-                            hashMap.put("type_user",type_user);
-                            hashMap.put("image","");
-
-                            FirebaseDatabase database=FirebaseDatabase.getInstance();
-
-                            DatabaseReference reference=database.getReference("usuarios");
-
-                            reference.child(user.getUid()).setValue(hashMap);
-
-                            API api = new API(SignActivity.this);
-                            api.register_user(task.getResult()
-                                    .getUser().getUid(),type_user,task.getResult().getUser().getDisplayName(),task.getResult().getUser().getEmail());
-
-                            FancyToast.makeText(SignActivity.this, "LogIn succes.",
-                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
-
-                            transitionToMediaActivity();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-
-                        }
-
-                    }
-                });
-    }
-    // [END auth_with_google]
 
     private String datetime(){
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
@@ -372,11 +286,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    // [START signin]
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+
 
     private void transitionToMediaActivity(){
         Intent intent=new Intent(SignActivity.this,MainMedia.class);

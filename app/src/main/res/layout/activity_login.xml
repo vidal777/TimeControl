@@ -15,27 +15,42 @@
         android:layout_weight="1"
         app:srcCompat="@mipmap/ic_launcher_logo_round" />
 
-    <EditText
-        android:id="@+id/edtEmail2"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Enter email..."
-        android:inputType="none|textEmailAddress" />
+        android:layout_marginLeft="60dp"
+        app:boxStrokeColor="@color/colorPrimaryDark">
 
-    <EditText
-        android:id="@+id/edtPass2"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEmail2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter email..."
+            android:inputType="none|text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Enter password..."
-        android:inputType="none|textPassword" />
+        android:layout_marginLeft="60dp"
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/colorPrimaryDark">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtPass2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter password..."
+            android:inputType="none|textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <Button
         android:id="@+id/btnForgot"

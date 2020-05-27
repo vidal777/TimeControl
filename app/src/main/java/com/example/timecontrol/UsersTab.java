@@ -136,7 +136,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         uid=user.getUid();
 
 
-        URL = "http://192.168.1.71/android_app/get_data_user.php?position=0&uid=" + uid;
+        URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=0&uid=" + uid;
 
 
         btnEntrada = view.findViewById(R.id.btnEntrada);

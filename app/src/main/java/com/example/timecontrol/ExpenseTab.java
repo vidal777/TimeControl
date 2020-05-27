@@ -96,7 +96,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
         user=firebaseAuth.getCurrentUser();
         uid=user.getUid();
 
-        URL="http://192.168.1.71/android_app/get_expense_user.php?position=0&uid=" + uid;
+        URL="http://timecontrol.ddns.net/android_app/get_expense_user.php?position=0&uid=" + uid;
         expense=view.findViewById(R.id.expense);
         listViewExpense=view.findViewById(R.id.listViewExpense);
         spinnerExpense=view.findViewById(R.id.spinnerExpense);
@@ -124,7 +124,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
         spinnerExpense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL = "http://192.168.1.71/android_app/get_expense_user.php?position=" + position + "&uid=" + uid;
+                URL = "http://timecontrol.ddns.net/android_app/get_expense_user.php?position=" + position + "&uid=" + uid;
                 Call_expense();
             }
 
@@ -356,7 +356,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.71/android_app/get_expense_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+                    URL = "http://timecontrol.ddns.net/android_app/get_expense_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
                     Call_expense();
 
                 }
@@ -365,7 +365,7 @@ public class ExpenseTab extends Fragment implements View.OnClickListener{
                 spinnerExpense.setSelection(0);
                 btnDateEntrance.setText("");
                 btnDateExit.setText("");
-                URL = "http://192.168.1.71/android_app/get_expense_user.php?position=0&uid=" + uid;
+                URL = "http://timecontrol.ddns.net/android_app/get_expense_user.php?position=0&uid=" + uid;
                 Call_expense();
                 break;
 

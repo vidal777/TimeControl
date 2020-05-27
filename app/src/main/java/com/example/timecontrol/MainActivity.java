@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText edtName,edtNameCompany,edtCIF,edtNumberWorkers,edtEmail;
     CheckBox checkPolitic,checkConditions;
 
-    String name,namecompany,email,CIF,numberWorkers;
+    String namecompany,email,CIF,numberWorkers;
 
 
 
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         //set inits
         btnSend=findViewById(R.id.btnSend);
-        edtName=findViewById(R.id.edtName);
         edtEmail=findViewById(R.id.edtEmail);
         edtCIF=findViewById(R.id.edtCIF);
         edtNameCompany=findViewById(R.id.edtNameCompany);
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                     FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                         }else{
                             API api = new API(MainActivity.this);
-                            api.set_company(name,namecompany,CIF,numberWorkers,email);
+                            api.set_company(namecompany,CIF,numberWorkers,email);
 
                             FancyToast.makeText(getApplicationContext(), "Company Update",
                                     FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
@@ -136,15 +135,9 @@ public class MainActivity extends AppCompatActivity {
         Boolean check=true;
         email= edtEmail.getText().toString().trim();
         namecompany= edtNameCompany.getText().toString().trim();
-        name= edtName.getText().toString().trim();
         CIF= edtCIF.getText().toString().trim();
         numberWorkers= edtNumberWorkers.getText().toString().trim();
 
-        if(name.length()<1){
-            edtName.setError("Name can't be blank");
-            edtName.setFocusable(true);
-            check=false;
-        }
         if (namecompany.contains("'")){
             edtNameCompany.setError("Only supports letters and numbers");
             edtNameCompany.setFocusable(true);

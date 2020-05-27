@@ -97,7 +97,9 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
         user=firebaseAuth.getCurrentUser();
         uidAdmin=user.getUid();
 
-        URL="http://192.168.1.71/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
+
+
+        URL="http://timecontrol.ddns.net/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
         expense=view.findViewById(R.id.expense);
         listViewExpense=view.findViewById(R.id.listViewExpense);
         spinnerExpense=view.findViewById(R.id.spinnerExpense);
@@ -125,7 +127,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
         spinnerExpense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL = "http://192.168.1.71/android_app/get_expense_admin.php?position=" + position ;
+                URL = "http://timecontrol.ddns.net/android_app/get_expense_admin.php?position=" + position + "&uidAdmin=" + uidAdmin ;
                 Call_expense();
             }
 
@@ -266,6 +268,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
 
     private void JSON_expense(String result){
+        Log.i("UIDADMIN",result);
         int suma = 0;
         expensesList.clear();
         ListAdapter adapter = new SimpleAdapter(getContext(), expensesList, R.layout.list_item_expense_admin, new String[]{"Name","Date", "Concept","Total"}, new int[]{R.id.Name,R.id.Date, R.id.Concept,R.id.Total});
@@ -361,7 +364,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.71/android_app/get_expense_admin.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
+                    URL = "http://timecontrol.ddns.net/android_app/get_expense_admin.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
                     Call_expense();
 
                 }
@@ -370,7 +373,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 spinnerExpense.setSelection(0);
                 btnDateEntrance.setText("");
                 btnDateExit.setText("");
-                URL="http://192.168.1.71/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
+                URL="http://timecontrol.ddns.net/android_app/get_expense_admin.php?position=0&uidAdmin=" + uidAdmin;
                 Call_expense();
                 break;
 

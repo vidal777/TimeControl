@@ -174,7 +174,7 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
 
                     }
                     API api = new API(this);
-                    api.set_expense(user.getUid(),user.getDisplayName(),data_entrada,price,comments,concept,uniqueID);
+                    api.set_expense(user.getUid(),data_entrada,price,comments,concept,uniqueID);
                     finish();
 
                 }else{

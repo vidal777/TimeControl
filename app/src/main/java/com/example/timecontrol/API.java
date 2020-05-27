@@ -9,6 +9,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -38,7 +41,7 @@ public class API{
     }
 
     public void register_user(final String uid,final String name,final String email,final String code){
-        String URL= "http://192.168.1.71/android_app/register_user.php";
+        String URL= "http://timecontrol.ddns.net/android_app/register_user.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -69,22 +72,22 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
-    public void get_in(final String uid, final String name, final String address){
+
+    public void get_in(final String uid, final String address, final ProfileTab.ServerCallback serverCallback){
         Log.i("ADDRESS", address + " ");
-        String URL= "http://192.168.1.71/android_app/get_in.php";
+        String URL= "http://timecontrol.ddns.net/android_app/get_in.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("DEBUG","EXIT");
+                serverCallback.onSucces(true);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("DEBUG","FAIL");
-
+                serverCallback.onSucces(false);
             }
         })
         {
@@ -94,7 +97,6 @@ public class API{
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
                 parametros.put("get_in", timestamp());
-                parametros.put("name", name);
                 parametros.put("address_in",address);
                 return parametros;
             }
@@ -103,20 +105,20 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
-    public void get_out(final String uid,final String name,final String address){
-        String URL= "http://192.168.1.71/android_app/get_out.php";
+    public void get_out(final String uid,final String address, final ProfileTab.ServerCallback serverCallback){
+        String URL= "http://timecontrol.ddns.net/android_app/get_out.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("DEBUG","EXIT");
+                serverCallback.onSucces(true);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("DEBUG","FAIL");
+                serverCallback.onSucces(false);
             }
         })
         {
@@ -125,7 +127,6 @@ public class API{
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
-                parametros.put("name", name);
                 parametros.put("get_out", timestamp());
                 parametros.put("address_out",address);
 
@@ -137,7 +138,7 @@ public class API{
     }
 
     public void change_data(final String uid,final String name){
-        String URL= "http://192.168.1.71/android_app/change_data.php";
+        String URL= "http://timecontrol.ddns.net/android_app/change_data.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -168,8 +169,8 @@ public class API{
 
     }
 
-    public void set_expense(final String uid,final String name,final String data,final int price,final String comments,final String concept,final String id){
-        String URL= "http://192.168.1.71/android_app/set_expense.php";
+    public void set_expense(final String uid,final String data,final int price,final String comments,final String concept,final String id){
+        String URL= "http://timecontrol.ddns.net/android_app/set_expense.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -191,7 +192,6 @@ public class API{
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parametros = new HashMap<String, String>();
                 parametros.put("uid", uid);
-                parametros.put("name", name);
                 parametros.put("data", data);
                 parametros.put("price", String.valueOf(price));
                 parametros.put("comments", comments);
@@ -206,8 +206,8 @@ public class API{
 
     }
 
-    public void set_company(final String name,final String nameCompany,final String CIF,final String numberWorkers,final String email){
-        String URL= "http://192.168.1.71/android_app/set_company.php";
+    public void set_company(final String nameCompany,final String CIF,final String numberWorkers,final String email){
+        String URL= "http://timecontrol.ddns.net/android_app/set_company.php";
 
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -228,7 +228,6 @@ public class API{
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parametros = new HashMap<String, String>();
-                parametros.put("name", name);
                 parametros.put("nameCompany", nameCompany);
                 parametros.put("CIF", CIF);
                 parametros.put("numberWorkers", numberWorkers);

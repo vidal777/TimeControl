@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -98,11 +99,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    private Boolean checkGaps(){
+        boolean mcheck=true;
+        String email= edtEmail2.getText().toString().trim();
+        String pass= edtPass2.getText().toString().trim();
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            edtEmail2.setError("Invalid Email");
+            edtEmail2.setFocusable(true);
+            mcheck=false;
+        }if(pass.length()<6){
+            edtPass2.setError("Password length at least 6 characters");
+            edtPass2.setFocusable(true);
+            mcheck=false;
+
+        }
+        return mcheck;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnLogin:
-                LogIn(edtEmail2.getText().toString(), edtPass2.getText().toString());
+                if (checkGaps()){
+                    LogIn(edtEmail2.getText().toString(), edtPass2.getText().toString());
+                }
                 break;
             case R.id.btnLog2:
                 startActivity(new Intent(LoginActivity.this, SignActivity.class));

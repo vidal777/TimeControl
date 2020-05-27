@@ -110,7 +110,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         uidAdmin=user.getUid();
 
 
-        URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
+        URL= "http://timecontrol.ddns.net/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
 
 
         btnEntrada=view.findViewById(R.id.btnEntrada);
@@ -140,7 +140,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Position=position;
-                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=" + position + "&uidAdmin=" + uidAdmin;
+                URL= "http://timecontrol.ddns.net/android_app/get_data_admin.php?position=" + position + "&uidAdmin=" + uidAdmin;
                 Call();
             }
 
@@ -165,11 +165,11 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
                 //searchLocation();
                 if (Position==3){
-                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+                    URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
 
                 }else{
 
-                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=" + Position + "&uid=" + uid; //Falla peruqe tenim que passar la data
+                    URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=" + Position + "&uid=" + uid; //Falla peruqe tenim que passar la data
                 }
                 Call_user();
             }
@@ -436,7 +436,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                     Position=3;
                     data_entrada=E_any+"-"+E_mes+"-"+E_dia;
                     data_sortida=S_any+"-"+S_mes+"-"+S_dia;
-                    URL= "http://192.168.1.71/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
+                    URL= "http://timecontrol.ddns.net/android_app/get_data_admin.php?position=3&data_entrada=" + data_entrada +"&data_sortida=" + data_sortida + "&uidAdmin=" + uidAdmin;
                     Call();
 
                 }
@@ -445,7 +445,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 btnSortida.setText("");
                 btnEntrada.setText("");
-                URL= "http://192.168.1.71/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
+                URL= "http://timecontrol.ddns.net/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
                 Call();
 
         }

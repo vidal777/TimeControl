@@ -18,14 +18,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         app:boxStrokeColor="@color/colorPrimaryDark">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+
             android:ems="10"
             android:hint="Enter name..."
             android:inputType="textPersonName" />
@@ -36,14 +37,14 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         app:boxStrokeColor="@color/colorPrimaryDark">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
             android:ems="10"
             android:hint="Enter email..."
             android:inputType="none|textEmailAddress" />
@@ -54,14 +55,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        app:passwordToggleEnabled="true"
         app:boxStrokeColor="@color/colorPrimaryDark">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+
             android:ems="10"
             android:hint="Enter password..."
             android:inputType="none|textPassword" />
@@ -72,17 +75,18 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         app:boxStrokeColor="@color/colorPrimaryDark">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+
             android:ems="10"
             android:hint="Enter code..."
-            android:inputType="none|textPassword" />
+            android:inputType="none|text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,25 +108,8 @@
             android:layout_weight="1"
             android:text=" SIGN IN"
             android:textAlignment="center" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/signInButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
- />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnRegisterCompany"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:focusable="auto"
-        android:text="Register Company"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="15dp"
-        tools:ignore="SpUsage" />
 
     <Button
         android:id="@+id/btnLog2"
@@ -134,6 +121,22 @@
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="15dp"
+        tools:ignore="SpUsage" />
+
+    <Button
+        android:id="@+id/btnRegisterCompany"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="60dp"
+        android:background="@null"
+        android:focusable="auto"
+        android:text="Register Company"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="15dp"
+        app:backgroundTint="#03A9F4"
         tools:ignore="SpUsage" />
 
 </LinearLayout>

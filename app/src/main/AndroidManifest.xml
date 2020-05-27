@@ -32,10 +32,8 @@
 
         </activity>
 
-        <activity android:name=".SignActivity" >
-
-
-
+        <activity android:name=".SignActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
         </activity>
 
@@ -58,7 +56,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".ResetPasswordActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
         <activity
             android:name=".MainMedia"
             android:launchMode="singleInstance" />
