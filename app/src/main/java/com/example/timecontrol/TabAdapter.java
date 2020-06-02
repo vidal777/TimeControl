@@ -13,39 +13,33 @@ import static com.example.timecontrol.SignActivity.prefe;
 
 
 public class TabAdapter extends FragmentPagerAdapter {
-    String user_type;
+    private String user_type;
 
-    public TabAdapter(@NonNull FragmentManager fm) {
+    TabAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 
-
+    @NonNull
     @Override
     public Fragment getItem(int tabPosition) {
         user_type=prefe.getString("User",null);
         switch(tabPosition){
             case 0:
-                ProfileTab profileTab = new ProfileTab();
-                return profileTab;
+                return new ProfileTab();
             case 1:
                 if (user_type.equals("User")){
-                    UsersTab usersTab=new UsersTab();
-                    return usersTab;
+                    return new UsersTab();
                 }else{
-                    AdminTab adminTab=new AdminTab();
-                    return adminTab;
+                    return new AdminTab();
                 }
             case 2:
                 if (user_type.equals("User")){
-                    ExpenseTab expenseTab=new ExpenseTab();
-                    return expenseTab;
+                    return new ExpenseTab();
                 }else{
-                    ExpenseAdminTab expenseAdminTab=new ExpenseAdminTab();
-                    return expenseAdminTab;
+                    return new ExpenseAdminTab();
                 }
             case 3:
-                SettingsTab settingsTab=new SettingsTab();
-                return settingsTab;
+                return new SettingsTab();
             default:
                 return null;
         }

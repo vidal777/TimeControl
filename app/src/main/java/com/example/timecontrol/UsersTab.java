@@ -71,36 +71,31 @@ import static com.android.volley.VolleyLog.TAG;
  */
 public class UsersTab extends Fragment implements View.OnClickListener {
 
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-
-    ListView listView;
-
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private ListView listView;
 
     private Spinner spinner;
 
-    String URL,uid;
+    private String URL,uid;
 
-    Button btnEntrada, btnSortida;
-    ImageButton btnOk, btnReset;
-
-
-    int E_dia, E_mes, E_any, S_dia, S_mes, S_any;
-
-    ArrayAdapter<String> adapterspinner;
+    private Button btnEntrada, btnSortida;
+    private ImageButton btnOk, btnReset;
 
 
+    private int E_dia, E_mes, E_any, S_dia, S_mes, S_any;
 
+    private ArrayAdapter<String> adapterspinner;
 
-    ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-    int day,month,year;
+    private ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+    private int day,month,year;
 
 
     public UsersTab() {
         // Required empty public constructor
     }
 
-    public LatLng getLocationFromAddress(Context context, String strAddress) {
+    private LatLng getLocationFromAddress(Context context, String strAddress) {
 
         Geocoder coder = new Geocoder(context);
         List<Address> address;
@@ -157,7 +152,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
 
         String[] opciones = {"Last Month", "Last Week", "Last Day"};
 
-        adapterspinner = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, opciones);
+        adapterspinner = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, opciones);
 
         spinner.setAdapter(adapterspinner);
 
@@ -181,10 +176,10 @@ public class UsersTab extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // Get the selected item text from ListView
-                HashMap<String, String> user = new HashMap<>();
+                HashMap<String, String> user;
                 user=userList.get(position);
                 Collection<String> values = user.values();
-                ArrayList<String> listOfValues = new ArrayList<String>(values);
+                ArrayList<String> listOfValues = new ArrayList<>(values);
                 final String address_in=listOfValues.get(1);
                 final String address_out=listOfValues.get(2);
                 // Display the selected item text on TextView

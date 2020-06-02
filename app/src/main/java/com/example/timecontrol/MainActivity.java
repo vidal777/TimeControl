@@ -59,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSend;
     TextInputEditText edtName,edtNameCompany,edtCIF,edtNumberWorkers,edtEmail;
     CheckBox checkPolitic,checkConditions;
-
     String namecompany,email,CIF,numberWorkers;
-
 
 
     @Override
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private Boolean checkGaps() {
-        Boolean check=true;
+        boolean check=true;
         email= edtEmail.getText().toString().trim();
         namecompany= edtNameCompany.getText().toString().trim();
         CIF= edtCIF.getText().toString().trim();
