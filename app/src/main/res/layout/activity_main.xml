@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context="apps.ejemplo.TimeControl.MainActivity">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView"
@@ -102,7 +102,7 @@
     <CheckBox
         android:id="@+id/checkPolitic"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_weight="1"
         android:text="He leído y acepto el Aviso Legal y la Política de Privicidad." />

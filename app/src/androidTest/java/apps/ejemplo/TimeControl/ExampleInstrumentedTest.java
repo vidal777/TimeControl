@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.content.Context;
 

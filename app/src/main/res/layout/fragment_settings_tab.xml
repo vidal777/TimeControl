@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsTab">
+    tools:context="apps.ejemplo.TimeControl.SettingsTab">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,7 +17,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:layout_alignParentEnd="false"
-                android:background="@color/colorPrimaryDark">
+                android:background="@color/colorPrimaryDark"
+                android:contentDescription="TODO">
 
             </ImageView>
 
@@ -87,14 +88,6 @@
 
                 </Button>
 
-                <Button
-                    android:id="@+id/btnChangeEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Change Email">
-
-                </Button>
-
 
                 <Button
                     android:id="@+id/btnExcel"
@@ -110,11 +103,4 @@
         </RelativeLayout>
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:src="@drawable/ic_action_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="19dp"
-        android:layout_gravity="bottom"/>
 </FrameLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.timecontrol">
+    package="apps.ejemplo.TimeControl">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".IntroActivity">
+        <activity android:name="apps.ejemplo.TimeControl.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -26,30 +26,30 @@
         </activity>
 
         <activity
-            android:name=".SignActivity"
+            android:name="apps.ejemplo.TimeControl.SignActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
 
-        <activity android:name=".ExpenseAdminTab" />
+        <activity android:name="apps.ejemplo.TimeControl.ExpenseAdminTab" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <activity
-            android:name=".AddExpense"
+            android:name="apps.ejemplo.TimeControl.AddExpense"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MapsActivity"
+            android:name="apps.ejemplo.TimeControl.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ResetPasswordActivity"
+        <activity android:name="apps.ejemplo.TimeControl.ResetPasswordActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
         <activity
-            android:name=".MainMedia"
+            android:name="apps.ejemplo.TimeControl.MainMedia"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".LoginActivity"
+            android:name="apps.ejemplo.TimeControl.LoginActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="apps.ejemplo.TimeControl.MainActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         </activity>
     </application>

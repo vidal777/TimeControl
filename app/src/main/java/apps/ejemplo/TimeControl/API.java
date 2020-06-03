@@ -1,38 +1,29 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
 
 public class API{
 
-    Context context;
-    RequestQueue requestQueue;
+    private Context context;
+    private RequestQueue requestQueue;
 
 
     public API(Context context) {
@@ -40,7 +31,7 @@ public class API{
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public void register_user(final String uid,final String name,final String email,final String code){
+    void register_user(final String uid, final String name, final String email, final String code){
         String URL= "http://timecontrol.ddns.net/android_app/register_user.php";
 
 
@@ -59,7 +50,7 @@ public class API{
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
                 parametros.put("name", name);
@@ -73,7 +64,7 @@ public class API{
     }
 
 
-    public void get_in(final String uid, final String address, final ProfileTab.ServerCallback serverCallback){
+    void get_in(final String uid, final String address, final ProfileTab.ServerCallback serverCallback){
         Log.i("ADDRESS", address + " ");
         String URL= "http://timecontrol.ddns.net/android_app/get_in.php";
 
@@ -92,8 +83,8 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
                 parametros.put("get_in", timestamp());
@@ -105,7 +96,7 @@ public class API{
         requestQueue.add(stringRequest);
     }
 
-    public void get_out(final String uid,final String address, final ProfileTab.ServerCallback serverCallback){
+    void get_out(final String uid, final String address, final ProfileTab.ServerCallback serverCallback){
         String URL= "http://timecontrol.ddns.net/android_app/get_out.php";
 
 
@@ -124,7 +115,7 @@ public class API{
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
                 parametros.put("get_out", timestamp());
@@ -157,8 +148,8 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("uid", uid);
                 parametros.put("name", name);
                 return parametros;
@@ -169,7 +160,7 @@ public class API{
 
     }
 
-    public void set_expense(final String uid,final String data,final int price,final String comments,final String concept,final String id){
+    void set_expense(final String uid, final String data, final int price, final String comments, final String concept, final String id){
         String URL= "http://timecontrol.ddns.net/android_app/set_expense.php";
 
 
@@ -189,8 +180,8 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("uid", uid);
                 parametros.put("data", data);
                 parametros.put("price", String.valueOf(price));
@@ -206,7 +197,7 @@ public class API{
 
     }
 
-    public void set_company(final String nameCompany,final String CIF,final String numberWorkers,final String email){
+    void set_company(final String nameCompany, final String CIF, final String numberWorkers, final String email){
         String URL= "http://timecontrol.ddns.net/android_app/set_company.php";
 
 
@@ -226,8 +217,8 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> parametros = new HashMap<>();
                 parametros.put("nameCompany", nameCompany);
                 parametros.put("CIF", CIF);
                 parametros.put("numberWorkers", numberWorkers);

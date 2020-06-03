@@ -1,16 +1,12 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.content.pm.PackageManager;
-import android.net.wifi.SupplicantState;
-import android.widget.Toast;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -70,9 +66,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
             StringBuilder sb = new StringBuilder();
             sb.append("Action: " + intent.getAction() + "\n");
-            sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
-            String log = sb.toString();
-            return log;
+            sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME) + "\n");
+            return sb.toString();
         }
 
         @Override

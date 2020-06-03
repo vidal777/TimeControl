@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 
 import android.app.AlertDialog;
@@ -8,14 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,31 +19,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONArray;
@@ -56,14 +42,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
-
-import static com.android.volley.VolleyLog.TAG;
 
 
 /**
@@ -159,7 +141,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                URL = "http://192.168.1.71/android_app/get_data_user.php?position=" + position + "&uid=" + uid;
+                URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=" + position + "&uid=" + uid;
                 Call();
             }
 
@@ -349,7 +331,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 } else {
                     String data_entrada = E_any + "-" + E_mes + "-" + E_dia;
                     String data_sortida = S_any + "-" + S_mes + "-" + S_dia;
-                    URL = "http://192.168.1.71/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
+                    URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=3&data_entrada=" + data_entrada + "&data_sortida=" + data_sortida + "&uid=" + uid;
                     Call();
 
                 }
@@ -358,7 +340,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 spinner.setSelection(0);
                 btnSortida.setText("");
                 btnEntrada.setText("");
-                URL = "http://192.168.1.71/android_app/get_data_user.php?position=0&uid=" + uid;
+                URL = "http://timecontrol.ddns.net/android_app/get_data_user.php?position=0&uid=" + uid;
                 Call();
                 break;
         }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ExpenseAdminTab">
+    tools:context="apps.ejemplo.TimeControl.ExpenseAdminTab">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/expense"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/ic_event_black_24dp"
+            android:drawableEnd="@drawable/ic_event_black_24dp"
             android:inputType="date"
             android:insetLeft="3dp"
             android:textColor="@color/black"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/ic_event_black_24dp"
+            android:drawableEnd="@drawable/ic_event_black_24dp"
             android:insetLeft="3dp"
             android:inputType="date"
             android:textColor="@color/black"
@@ -78,9 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:autoText="false"
             android:freezesText="false"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:text="Total"
             android:textAllCaps="false"
             android:textSize="30sp"
@@ -93,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:text="0"
             android:textAlignment="viewEnd"
             android:textSize="30sp">

@@ -1,8 +1,7 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -21,7 +20,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -33,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,31 +54,31 @@ import java.util.HashMap;
 
 public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    String uidAdmin;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private String uidAdmin;
 
-    FloatingActionButton expense;
+    private FloatingActionButton expense;
 
-    ListView listViewExpense;
+    private ListView listViewExpense;
 
-    String URL,uid;
+    private String URL,uid;
 
-    ArrayList<HashMap<String, String>> expensesList= new ArrayList<>();
+    private ArrayList<HashMap<String, String>> expensesList= new ArrayList<>();
 
-    Spinner spinnerExpense;
+    private Spinner spinnerExpense;
 
-    Button btnDateEntrance,btnDateExit;
+    private Button btnDateEntrance,btnDateExit;
 
-    TextView totalSuma;
+    private TextView totalSuma;
 
-    ImageButton btnOk,btnReset;
+    private ImageButton btnOk,btnReset;
 
-    Uri uri=null;
+    private Uri uri=null;
 
-    int E_dia, E_mes, E_any, S_dia, S_mes, S_any,year,month,day;
+    private int E_dia, E_mes, E_any, S_dia, S_mes, S_any,year,month,day;
 
-    ArrayAdapter<String> adapterspinner;
+    private ArrayAdapter<String> adapterspinner;
 
 
     public ExpenseAdminTab() {
@@ -119,7 +118,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
         String[] opciones = {"Last Month", "Last Week", "Last Day"};
 
-        adapterspinner = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, opciones);
+        adapterspinner = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, opciones);
 
         spinnerExpense.setAdapter(adapterspinner);
 
@@ -142,10 +141,10 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the selected item text from ListView
-                HashMap<String, String> user = new HashMap<>();
+                HashMap<String, String> user;
                 user=expensesList.get(position);
                 Collection<String> values = user.values();
-                ArrayList<String> listOfValues = new ArrayList<String>(values);
+                ArrayList<String> listOfValues = new ArrayList<>(values);
 
                 final String concept=listOfValues.get(0);
                 final String comments=listOfValues.get(1);

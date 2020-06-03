@@ -8,6 +8,72 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1037153558802:android:8b27b77428921a4d0153cb",
+        "android_client_info": {
+          "package_name": "apps.ejemplo.TimeControl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKJpqgosEvnR5xag8Ju8NcFu35qsPtXeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037153558802:android:ecf102ab9a0e00a30153cb",
+        "android_client_info": {
+          "package_name": "com.example.instagramclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037153558802-f6pntjdhu7bjmeffgugdvj84j23afrkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.instagramclone",
+            "certificate_hash": "58b3d879f46282974d7abd392b5bf195f82d6824"
+          }
+        },
+        {
+          "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKJpqgosEvnR5xag8Ju8NcFu35qsPtXeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037153558802-acmp5n8m67pme1cd9jtgfta4ujbbvn4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1037153558802:android:ac1e345af11aaa670153cb",
         "android_client_info": {
           "package_name": "com.example.timecontrol"

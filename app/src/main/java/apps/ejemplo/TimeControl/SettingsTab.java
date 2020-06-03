@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 
 import android.Manifest;
@@ -8,34 +8,25 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContentResolverCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,13 +35,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
@@ -63,35 +52,34 @@ import static com.google.firebase.storage.FirebaseStorage.getInstance;
 public class SettingsTab extends Fragment {
 
     //firebase
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     //storage
-    StorageReference storageReference;
+    private StorageReference storageReference;
     //path where images of user profile and cover will be stored
-    String storagePath= "Users_Profile_Cover_Imgs/";
+    private String storagePath= "Users_Profile_Cover_Imgs/";
 
-    ImageView avatarIv, coverIv;
-    TextView nameTv,emailTv,userTv;
-    FloatingActionButton fab;
+    private ImageView avatarIv;
+    private TextView nameTv,emailTv,userTv;
 
-    ProgressDialog pd;
+    private ProgressDialog pd;
 
     private static final int CAMERA_REQUEST_CODE=100;
     private static final int STORAGE_REQUEST_CODE=200;
     private static final int IMAGE_PICK_GALLERY_CODE=300;
     private static final int IMAGE_PICK_CAMERA_CODE=400;
 
-    String cameraPermissions[];
-    String storagePermissions[];
+    private String cameraPermissions[];
+    private String storagePermissions[];
 
     //uri of picked image
-    Uri image_uri;
+    private Uri image_uri;
 
     //for checking profile or cover photo
-    String profileorCoverPhoto;
+    private String profileorCoverPhoto;
 
 
 
@@ -124,7 +112,6 @@ public class SettingsTab extends Fragment {
         nameTv=view.findViewById(R.id.nameTv);
         emailTv=view.findViewById(R.id.emailTv);
         userTv=view.findViewById(R.id.userTv);
-        fab=view.findViewById(R.id.fab);
 
         //init progress dialog
         pd= new ProgressDialog(getActivity());
@@ -146,7 +133,7 @@ public class SettingsTab extends Fragment {
                     userTv.setText(user);
 
                     try{
-                       Picasso.get().load(image).rotate(-90).into(avatarIv);
+                       Picasso.get().load(image).into(avatarIv);
                     }catch (Exception e){
                         Picasso.get().load(R.drawable.ic_add_photo).into(avatarIv);
                     }
@@ -162,10 +149,10 @@ public class SettingsTab extends Fragment {
 
         //fab button
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        avatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditProfileDialog();
+                showImagePicDialog();
             }
         });
 
@@ -173,8 +160,7 @@ public class SettingsTab extends Fragment {
     }
 
     private boolean checkStoragePermission(){
-        boolean result= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        return ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestStoragePermission(){
@@ -182,114 +168,25 @@ public class SettingsTab extends Fragment {
     }
 
     private boolean checkCameraPermission(){
-        boolean result= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        return ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestCameraPermission(){
         requestPermissions(cameraPermissions,CAMERA_REQUEST_CODE);
     }
 
-    private void showEditProfileDialog(){
-        String options[] = {"Edit Profile Picture","Edit Name"};
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose Action");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0){
-                    Log.i("DEBUG","1");
-                    pd.setMessage("Updating Profile Picture");
-                    profileorCoverPhoto= "image";
-                    showImagePicDialog();
 
-                }else if(which == 1){
-                    pd.setMessage("Updating Name");
-                    showNameUpdateDialog("name");
-
-                }
-            }
-        });
-        builder.create().show();
-    }
-
-    private void showNameUpdateDialog(final String key) {
-        final AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
-        builder.setTitle("Update " + key);
-
-        //set layout of dialog
-        LinearLayout linearLayout= new LinearLayout(getActivity());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setPadding(10,10,10,10);
-
-        //add edit text
-        final EditText editText=new EditText(getActivity());
-        editText.setHint("Enter " + key);
-        linearLayout.addView(editText);
-
-        builder.setView(linearLayout);
-
-        //add buttons in dialog
-        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //input text from edit text
-                final String value= editText.getText().toString().trim();
-
-                if(!TextUtils.isEmpty(value)){
-                    pd.show();
-                    HashMap<String,Object> result = new HashMap<>();
-                    result.put(key,value);
-
-                    databaseReference.child(user.getUid()).updateChildren(result)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    pd.dismiss();
-                                    API api = new API(getContext());
-                                    api.change_data(user.getUid(),value);
-                                    FancyToast.makeText(getContext(), "Updated",
-                                            FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    pd.dismiss();
-                                    FancyToast.makeText(getContext(), "" + e.getMessage(),
-                                            FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
-
-                                }
-                            });
-
-                }else{
-                    FancyToast.makeText(getContext(), "Please enter "+key,
-                            FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
-
-                }
-
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        //create and show dialog
-        builder.create().show();
-    }
 
     private void showImagePicDialog(){
-        String options[] = {"Camera","Gallery"};
+        String[] options = {"Camera", "Gallery"};
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("Pick Image From");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                profileorCoverPhoto= "image";
                 if (which == 0){  //Camera clicked
                     if (!checkCameraPermission()){
                         requestCameraPermission();

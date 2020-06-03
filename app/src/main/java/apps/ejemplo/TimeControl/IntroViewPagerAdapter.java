@@ -1,7 +1,6 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import apps.ejemplo.TimeControl.R;
+
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter {
 
-    Context context;
-    List<ScreenItem> listScreen;
+    private Context context;
+    private List<ScreenItem> listScreen;
 
-    public IntroViewPagerAdapter(Context context, List<ScreenItem> listScreen) {
+    IntroViewPagerAdapter(Context context, List<ScreenItem> listScreen) {
         this.context = context;
         this.listScreen = listScreen;
     }

@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -72,8 +73,8 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
     private static final int IMAGE_PICK_CAMERA_CODE=400;
 
 
-    String cameraPermissions[];
-    String storagePermissions[];
+    String[] cameraPermissions;
+    String[] storagePermissions;
 
     String concept;
 
@@ -115,7 +116,7 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
 
         final String[] opcions = {"Dietes", "Transport", "Varis"};
 
-        adapterspinner_expense = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcions);
+        adapterspinner_expense = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opcions);
 
         spinner_expense.setAdapter(adapterspinner_expense);
 
@@ -143,9 +144,8 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
         day=c.get(Calendar.DAY_OF_MONTH);
 
         SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy");
-        String formattedDate = df.format(c.getTime());
 
-        return formattedDate;
+        return df.format(c.getTime());
     }
 
     @Override
@@ -201,8 +201,7 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
 
 
     private boolean checkCameraPermission(){
-        boolean result= ContextCompat.checkSelfPermission(AddExpense.this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        return ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestCameraPermission(){

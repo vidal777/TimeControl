@@ -1,18 +1,15 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.ULocale;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,23 +24,16 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONArray;
@@ -179,7 +169,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
     }
     private void Create_view(){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-        builderSingle.setTitle("Select One Name:");
+        builderSingle.setTitle("Select One Date:");
 
         ListAdapter adapter = new SimpleAdapter(getContext(), userList, R.layout.list_item_user, new String[]{"get_in", "get_out"}, new int[]{R.id.get_in, R.id.get_out});
 

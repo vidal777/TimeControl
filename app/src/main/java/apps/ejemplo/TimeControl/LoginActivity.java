@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import static com.example.timecontrol.SignActivity.editore;
+import static apps.ejemplo.TimeControl.SignActivity.editore;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         FirebaseUser user =  FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference mref = FirebaseDatabase.getInstance().getReference("usuarios").child(user.getUid().toString()).child("type_user");
+        DatabaseReference mref = FirebaseDatabase.getInstance().getReference("usuarios").child(user.getUid()).child("type_user");
         mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

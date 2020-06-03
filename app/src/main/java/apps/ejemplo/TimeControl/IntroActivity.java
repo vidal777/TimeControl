@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import apps.ejemplo.TimeControl.R;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -123,8 +124,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private boolean restorePrefData(){
         SharedPreferences pref= getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
-        Boolean isIntroActivityOpenedBefore= pref.getBoolean("isIntroOpened",false);
-        return isIntroActivityOpenedBefore;
+        return pref.getBoolean("isIntroOpened",false);
 
     }
 
@@ -133,7 +133,7 @@ public class IntroActivity extends AppCompatActivity {
         SharedPreferences pref= getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
         SharedPreferences.Editor editor=pref.edit();
         editor.putBoolean("isIntroOpened",true);
-        editor.commit();
+        editor.apply();
 
     }
 

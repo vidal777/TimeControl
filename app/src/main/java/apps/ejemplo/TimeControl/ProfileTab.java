@@ -1,4 +1,4 @@
-package com.example.timecontrol;
+package apps.ejemplo.TimeControl;
 
 
 import android.Manifest;
@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,13 +43,13 @@ import java.util.Locale;
 public class ProfileTab extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
 
-    public static Button btnFitxar;
+    static Button btnFitxar;
 
     private SharedPreferences pref;
 
     private SharedPreferences.Editor editor;
 
-    String address;
+    private String address;
 
 
 
@@ -123,7 +124,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             else {
                 if (addresses.size() > 0) {
                     address=addresses.get(0).getAddressLine(0);
-                    if (valor=="FITXAR"){
+                    if (valor.equals("FITXAR")){
                         API api = new API(getContext());
                         //api.get_in(user.getUid(),user.getDisplayName(),address);
                         api.get_in(user.getUid(),address,new ServerCallback(){
@@ -231,7 +232,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.btnFitxar:
-                if (btnFitxar.getText().toString() == "FITXAR") {
+                if (btnFitxar.getText().toString().equals("FITXAR")) {
 
                     final FirebaseUser user = mAuth.getCurrentUser();
 
