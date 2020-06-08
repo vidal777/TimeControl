@@ -52,34 +52,34 @@ import static com.google.firebase.storage.FirebaseStorage.getInstance;
 public class SettingsTab extends Fragment {
 
     //firebase
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     //storage
-    private StorageReference storageReference;
+    StorageReference storageReference;
     //path where images of user profile and cover will be stored
-    private String storagePath= "Users_Profile_Cover_Imgs/";
+    String storagePath= "Users_Profile_Cover_Imgs/";
 
-    private ImageView avatarIv;
-    private TextView nameTv,emailTv,userTv;
+    ImageView avatarIv;
+    TextView nameTv,emailTv,userTv;
 
-    private ProgressDialog pd;
+    ProgressDialog pd;
 
     private static final int CAMERA_REQUEST_CODE=100;
     private static final int STORAGE_REQUEST_CODE=200;
     private static final int IMAGE_PICK_GALLERY_CODE=300;
     private static final int IMAGE_PICK_CAMERA_CODE=400;
 
-    private String cameraPermissions[];
-    private String storagePermissions[];
+    String cameraPermissions[];
+    String storagePermissions[];
 
     //uri of picked image
-    private Uri image_uri;
+    Uri image_uri;
 
     //for checking profile or cover photo
-    private String profileorCoverPhoto;
+    String profileorCoverPhoto;
 
 
 
@@ -135,7 +135,7 @@ public class SettingsTab extends Fragment {
                     try{
                        Picasso.get().load(image).into(avatarIv);
                     }catch (Exception e){
-                        Picasso.get().load(R.drawable.ic_add_photo).into(avatarIv);
+                        //Picasso.get().load(R.drawable.ic_add_photo).into(avatarIv);
                     }
 
                 }
@@ -160,7 +160,8 @@ public class SettingsTab extends Fragment {
     }
 
     private boolean checkStoragePermission(){
-        return ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        boolean result= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result;
     }
 
     private void requestStoragePermission(){
@@ -168,7 +169,8 @@ public class SettingsTab extends Fragment {
     }
 
     private boolean checkCameraPermission(){
-        return ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result= ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        return result;
     }
 
     private void requestCameraPermission(){
@@ -179,7 +181,7 @@ public class SettingsTab extends Fragment {
 
 
     private void showImagePicDialog(){
-        String[] options = {"Camera", "Gallery"};
+        String options[] = {"Camera","Gallery"};
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("Pick Image From");

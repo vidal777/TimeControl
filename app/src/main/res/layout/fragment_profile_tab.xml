@@ -16,7 +16,7 @@
         android:enabled="true"
         android:onClick="onClick"
         android:text="@string/FITXAR"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
 
 

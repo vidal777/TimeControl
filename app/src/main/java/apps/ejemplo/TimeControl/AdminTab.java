@@ -277,8 +277,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             JSONArray users = jsonObj.getJSONArray("users");
 
             if (users.toString().equals("[]")) {
-                FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",
-                        FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
+                //FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
                 //listView.setAdapter(null);
 
             } else {
@@ -322,8 +321,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
             JSONArray users=jsonObj.getJSONArray("users");
 
             if (users.toString().equals("[]")){
-                FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",
-                        FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
+                //FancyToast.makeText(getContext(), "NO DATA ON THIS DATE",FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
                 listView.setAdapter(null);
 
             }else{

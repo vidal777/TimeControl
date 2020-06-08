@@ -59,8 +59,6 @@ public class MainMedia extends AppCompatActivity {
 
  */
 
-
-
     }
 
     @Override

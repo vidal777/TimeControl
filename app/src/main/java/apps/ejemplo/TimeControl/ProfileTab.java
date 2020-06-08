@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +36,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static apps.ejemplo.TimeControl.R.drawable.custom_button;
+import static apps.ejemplo.TimeControl.R.drawable.custom_button_red;
 
 
 /**
@@ -65,7 +69,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     public void onStart() {
         if (pref.getBoolean("Valor",false)) {
             btnFitxar.setText("ACABAR");
-            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+            btnFitxar.setBackgroundResource(custom_button_red);
         }
         super.onStart();
     }
@@ -92,9 +96,9 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
         if (pref.getBoolean("Valor",false)) {
             btnFitxar.setText("ACABAR");
-            btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+            btnFitxar.setBackgroundResource(custom_button_red);
         }else{
-            btnFitxar.setBackgroundResource(R.drawable.custom_button);
+            btnFitxar.setBackgroundResource(custom_button);
         }
 
 
@@ -199,10 +203,12 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+
     private void Start(){
 
         btnFitxar.setText("ACABAR");
-        btnFitxar.setBackgroundResource(R.drawable.custom_button_red);
+        //btnFitxar.setBackgroundResource(custom_button_red);
+
 
         FancyToast.makeText(getContext(), "GET IN " + time(),
                 FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
@@ -214,7 +220,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     private void Finish(){
         btnFitxar.setText("FITXAR");
-        btnFitxar.setBackgroundResource(R.drawable.custom_button);
+        //btnFitxar.setBackgroundResource(custom_button);
 
         FancyToast.makeText(getContext(), "GET OUT " + time(),
                 FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
