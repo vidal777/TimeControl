@@ -49,7 +49,7 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> parametros = new HashMap<>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
@@ -114,7 +114,7 @@ public class API{
         })
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> parametros = new HashMap<>();
                 parametros.put("data", datetime());
                 parametros.put("uid", uid);
@@ -224,6 +224,42 @@ public class API{
                 parametros.put("numberWorkers", numberWorkers);
                 parametros.put("email", email);
 
+                return parametros;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+    }
+
+    void set_excel(final String uidAdmin,final String email,final String position,final String type_data,final String data_entrada,final String data_sortida){
+        String URL= "http://timecontrol.ddns.net/android_app/set_excel.php";
+
+
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FancyToast.makeText(context, "Excel Send",
+                        FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                FancyToast.makeText(context, "Fail Sending Excel",
+                        FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> parametros = new HashMap<>();
+                parametros.put("email",email);
+                parametros.put("uidAdmin", uidAdmin);
+                parametros.put("position", position);
+                parametros.put("type_data", type_data);
+                parametros.put("data_entrada",data_entrada);
+                parametros.put("data_sortida",data_sortida);
                 return parametros;
             }
         };

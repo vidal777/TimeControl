@@ -32,6 +32,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -166,7 +167,8 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                 final String address_out=listOfValues.get(2);
                 // Display the selected item text on TextView
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+
                 builder.setTitle("Which address do you want to check?")
                         .setIcon(R.drawable.ic_location)
                         .setCancelable(false)
@@ -182,7 +184,7 @@ public class UsersTab extends Fragment implements View.OnClickListener {
                                 searchLocation(address_in);
                             }
                         });
-                AlertDialog alert = builder.create();
+                androidx.appcompat.app.AlertDialog alert = builder.create();
                 alert.setCanceledOnTouchOutside(true);
                 alert.show();
             }

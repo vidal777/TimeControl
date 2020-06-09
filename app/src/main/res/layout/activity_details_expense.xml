@@ -31,7 +31,7 @@
 
             android:scrollbarSize="4dp"
             android:src="@drawable/ic_back"
-            android:visibility="visible"></ImageButton>
+            android:visibility="visible" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -40,8 +40,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-
-
 
         <TextView
             android:id="@+id/txtDate"

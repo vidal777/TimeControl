@@ -7,6 +7,14 @@
     android:background="#FAF7F7"
     tools:context="apps.ejemplo.TimeControl.UsersTab">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/excel"
+        android:src="@drawable/ic_file_download_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="19dp"
+        android:layout_gravity="bottom" />
+
 
     <ListView
         android:id="@+id/listView"

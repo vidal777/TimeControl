@@ -5,8 +5,10 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,10 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -32,9 +36,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import apps.ejemplo.TimeControl.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +70,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
     private String URL;
 
     private Button btnEntrada,btnSortida;
+    private FloatingActionButton excel;
     private ImageButton btnOk,btnReset;
 
 
@@ -107,13 +115,14 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         btnSortida=view.findViewById(R.id.btnSortida);
         btnOk=view.findViewById(R.id.btnOk);
         btnReset=view.findViewById(R.id.btnReset);
+        excel=view.findViewById(R.id.excel);
 
 
         btnEntrada.setOnClickListener(AdminTab.this);
         btnSortida.setOnClickListener(AdminTab.this);
         btnOk.setOnClickListener(AdminTab.this);
         btnReset.setOnClickListener(AdminTab.this);
-
+        excel.setOnClickListener(AdminTab.this);
 
 
         listView=view.findViewById(R.id.listView);
@@ -168,7 +177,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
         return view;
     }
     private void Create_view(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builderSingle = new MaterialAlertDialogBuilder(getActivity());
         builderSingle.setTitle("Select One Date:");
 
         ListAdapter adapter = new SimpleAdapter(getContext(), userList, R.layout.list_item_user, new String[]{"get_in", "get_out"}, new int[]{R.id.get_in, R.id.get_out});
@@ -190,7 +199,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 final String address_in=listOfValues.get(1);
                 final String address_out=listOfValues.get(2);
                 //String strName = arrayAdapter.getItem(which);
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builderInner = new MaterialAlertDialogBuilder(getActivity());
                 builderInner.setTitle("Your Selected Item is");
                 builderInner.setPositiveButton("Address Out", new DialogInterface.OnClickListener() {
                     @Override
@@ -204,12 +213,12 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                         searchLocation(address_in);
                     }
                 });
-                AlertDialog alert = builderInner.create();
+                androidx.appcompat.app.AlertDialog alert = builderInner.create();
                 alert.setCanceledOnTouchOutside(true);
                 alert.show();
             }
         });
-        AlertDialog alert = builderSingle.create();
+        androidx.appcompat.app.AlertDialog alert = builderSingle.create();
         alert.setCanceledOnTouchOutside(true);
         alert.show();
     }
@@ -379,6 +388,42 @@ public class AdminTab extends Fragment implements View.OnClickListener {
     }
 
 
+    private void getExcel(){
+                final API api = new API(getContext());
+                data_entrada=E_any+"-"+E_mes+"-"+E_dia;
+                data_sortida=S_any+"-"+S_mes+"-"+S_dia;
+
+
+                //String strName = arrayAdapter.getItem(which);
+                MaterialAlertDialogBuilder builderInner = new MaterialAlertDialogBuilder(getActivity());
+                builderInner.setTitle("Select type data");
+                builderInner.setMessage("You have two options for extracting the data:" +
+                        "The first corresponds to the registration of all hours and locations. The second corresponds to the total hours.");
+                builderInner.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builderInner.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        api.set_excel(user.getUid(),user.getEmail(),Position+"","Register",data_entrada,data_sortida);
+                    }
+                });
+                builderInner.setNegativeButton("Hours", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int which) {
+                        api.set_excel(user.getUid(),user.getEmail(),Position+"","Hours",data_entrada,data_sortida);
+                    }
+                });
+                androidx.appcompat.app.AlertDialog alert = builderInner.create();
+                alert.setCanceledOnTouchOutside(true);
+                alert.show();
+
+    }
+
+
     @Override
     public void onClick(View v) {
 
@@ -434,6 +479,10 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 btnEntrada.setText("");
                 URL= "http://timecontrol.ddns.net/android_app/get_data_admin.php?position=0&uidAdmin=" + uidAdmin ;
                 Call();
+                break;
+            case R.id.excel:
+                getExcel();
+                break;
 
         }
     }
