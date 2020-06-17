@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import apps.ejemplo.TimeControl.R;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import com.squareup.picasso.Picasso;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -170,7 +172,7 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
                     String comments=edtComments.getText().toString();
                     if(image_uri!=null){
                         uniqueID = UUID.randomUUID().toString();
-                        uploadProfileCoverPhoto(image_uri,uniqueID);
+                        uploadExpense(image_uri,uniqueID);
 
                     }
                     API api = new API(this);
@@ -210,57 +212,12 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    private void uploadProfileCoverPhoto(Uri uri,String id) {
+    private void uploadExpense(Uri uri,String id) {
 
         String filePathAndName= storagePath + "" + id;
         StorageReference storageReference2nd= storageReference.child(filePathAndName);
 
-        storageReference2nd.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!uriTask.isSuccessful());
-                        Uri dowloadUri= uriTask.getResult();
-
-                        //check if image is uploaded or not
-                        if (uriTask.isSuccessful()){
-                            //image uploaded
-                            HashMap<String,Object> results= new HashMap<>();
-                            results.put("image", dowloadUri.toString());
-
-                            databaseReference.child(user.getUid()).updateChildren(results)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            FancyToast.makeText(getApplicationContext(), "Expense Updated",
-                                                    FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,true).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            FancyToast.makeText(getApplicationContext(), "Error Updating Expense",
-                                                    FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
-                                        }
-                                    });
-
-                        }else{
-                            //error
-                            FancyToast.makeText(getApplicationContext(), "Some error occured",
-                                    FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
-
-                        }
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        FancyToast.makeText(getApplicationContext(), e.getMessage(),
-                                FancyToast.LENGTH_SHORT,FancyToast.INFO,true).show();
-                    }
-                });
+        storageReference2nd.putFile(uri);
 
     }
 
@@ -276,7 +233,7 @@ public class AddExpense extends AppCompatActivity implements View.OnClickListene
 
             }
             if(requestCode== IMAGE_PICK_CAMERA_CODE){
-                Picasso.get().load(image_uri).rotate(90).into(imageButton);
+                Glide.with(getApplicationContext()).load(image_uri).into(imageButton);
                 imageButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
                // uploadProfileCoverPhoto(image_uri);
 

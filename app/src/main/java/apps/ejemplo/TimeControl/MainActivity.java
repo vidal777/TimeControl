@@ -2,14 +2,18 @@ package apps.ejemplo.TimeControl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,6 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import apps.ejemplo.TimeControl.R;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
@@ -27,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText edtName,edtNameCompany,edtCIF,edtNumberWorkers,edtEmail;
     CheckBox checkPolitic,checkConditions;
     String namecompany,email,CIF,numberWorkers;
+    private LinearLayout linearLayout;
 
 
     @Override
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         edtNumberWorkers=findViewById(R.id.edtNumberWorkers);
         checkConditions=findViewById(R.id.checkConditions);
         checkPolitic=findViewById(R.id.checkPolitic);
+        linearLayout=findViewById(R.id.linearLayout);
 
 
 
@@ -56,7 +64,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        linearLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+
     }
+
+    private void DialogPopUp(){
+        MaterialAlertDialogBuilder builderInner = new MaterialAlertDialogBuilder(this);
+        builderInner.setTitle("Check email");
+        builderInner.setMessage("\n" +
+                "Check your email so you can register. You will see that a number of codes have been sent. First of all it corresponds to the administrator of the company. Then register using your name and provide the other codes to users.");
+        builderInner.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent= new Intent(MainActivity.this,SignActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        androidx.appcompat.app.AlertDialog alert = builderInner.create();
+        alert.setCanceledOnTouchOutside(true);
+        alert.show();
+
+    }
+
 
     private void checkCompany() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -65,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("RESPONSE",response);
                         response=response.trim();
                         if(response.equals("Exists")){
                             FancyToast.makeText(getApplicationContext(), "Company exists",
@@ -74,10 +111,8 @@ public class MainActivity extends AppCompatActivity {
                             API api = new API(MainActivity.this);
                             api.set_company(namecompany,CIF,numberWorkers,email);
 
+                            DialogPopUp();
 
-                            Intent intent= new Intent(MainActivity.this,SignActivity.class);
-                            startActivity(intent);
-                            finish();
                         }
 
                     }

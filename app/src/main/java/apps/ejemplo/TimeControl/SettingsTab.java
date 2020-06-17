@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import apps.ejemplo.TimeControl.R;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,11 +42,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import com.squareup.picasso.Picasso;
 
+
+import java.io.File;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
@@ -123,7 +127,12 @@ public class SettingsTab extends Fragment {
         //init progress dialog
         pd= new ProgressDialog(getActivity());
 
+        /*
+        StorageReference storageRef =
+                FirebaseStorage.getInstance().getReference();
+        storageRef.child("Expenses/"+idPhoto).getDownloadUrl()
 
+         */
 
         Query query=databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
@@ -138,11 +147,12 @@ public class SettingsTab extends Fragment {
                     nameTv.setText(name);
                     emailTv.setText(email);
                     userTv.setText(user);
+                    Log.i("IMAGEDATA",image);
 
                     try{
-                       Picasso.get().load(image).into(avatarIv);
+                        Glide.with(getActivity()).load(image).into(avatarIv);
                     }catch (Exception e){
-                        //Picasso.get().load(R.drawable.ic_add_photo).into(avatarIv);
+                        Glide.with(getActivity()).load(R.drawable.ic_add_photo).into(avatarIv);
                     }
 
                 }
@@ -153,6 +163,8 @@ public class SettingsTab extends Fragment {
 
             }
         });
+
+
 
         //fab button
 
@@ -289,6 +301,7 @@ public class SettingsTab extends Fragment {
     private void uploadProfileCoverPhoto(Uri uri) {
 
         String filePathAndName= storagePath + "" + profileorCoverPhoto + "_"+ user.getUid();
+        Log.i("IMAGE",filePathAndName);
         StorageReference storageReference2nd= storageReference.child(filePathAndName);
 
         storageReference2nd.putFile(uri)

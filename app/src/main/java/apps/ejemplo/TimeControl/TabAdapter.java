@@ -61,7 +61,7 @@ public class TabAdapter extends FragmentPagerAdapter {
                 if (user_type.equals("User")) return "Users";
                 else return "Admin";
             case 2:
-                return  "Expense";
+                return "Expense";
             case 3:
                 return "Settings";
             default:

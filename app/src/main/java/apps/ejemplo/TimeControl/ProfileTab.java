@@ -68,7 +68,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("ACABAR");
+            btnFitxar.setText("GET OUT");
             btnFitxar.setBackgroundResource(custom_button_red);
         }
         super.onStart();
@@ -87,7 +87,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         btnFitxar.setOnClickListener(ProfileTab.this);
-        btnFitxar.setText("FITXAR");
+        btnFitxar.setText("GET IN");
 
 
         pref = getActivity().getSharedPreferences("MyPref", 0); //Use save state button
@@ -95,7 +95,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
 
         if (pref.getBoolean("Valor",false)) {
-            btnFitxar.setText("ACABAR");
+            btnFitxar.setText("GET OUT");
             btnFitxar.setBackgroundResource(custom_button_red);
         }else{
             btnFitxar.setBackgroundResource(custom_button);
@@ -128,7 +128,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
             else {
                 if (addresses.size() > 0) {
                     address=addresses.get(0).getAddressLine(0);
-                    if (valor.equals("FITXAR")){
+                    if (valor.equals("GET IN")){
                         API api = new API(getContext());
                         //api.get_in(user.getUid(),user.getDisplayName(),address);
                         api.get_in(user.getUid(),address,new ServerCallback(){
@@ -188,7 +188,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
                 });
     }
 
-    
+
     private String time(){
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
@@ -206,7 +206,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
     private void Start(){
 
-        btnFitxar.setText("ACABAR");
+        btnFitxar.setText("GET OUT");
         //btnFitxar.setBackgroundResource(custom_button_red);
 
 
@@ -219,7 +219,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
     }
 
     private void Finish(){
-        btnFitxar.setText("FITXAR");
+        btnFitxar.setText("GET IN");
         //btnFitxar.setBackgroundResource(custom_button);
 
         FancyToast.makeText(getContext(), "GET OUT " + time(),
@@ -238,7 +238,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.btnFitxar:
-                if (btnFitxar.getText().toString().equals("FITXAR")) {
+                if (btnFitxar.getText().toString().equals("GET IN")) {
 
                     final FirebaseUser user = mAuth.getCurrentUser();
 
@@ -247,7 +247,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
                         public void OnSucces(Location location) {
                             if (isNetworkAvailable()){
                                 Log.i("NETWORK AVAIBLE","NETWORK AVAIBLE");
-                                updateLocation("FITXAR",location,user);
+                                updateLocation("GET IN",location,user);
                             }else{
                                 Log.i("NO NETWORK","NO NETWORK");
                             }
@@ -264,7 +264,7 @@ public class ProfileTab extends Fragment implements View.OnClickListener {
                         public void OnSucces(Location location) {
                             if (isNetworkAvailable()){
                                 Log.i("NETWORK AVAIBLE","NETWORK AVAIBLE");
-                                updateLocation("NOFITXAR",location,user);
+                                updateLocation("GET OUT",location,user);
                             }else{
                                 Log.i("NO NETWORK","NO NETWORK");
                             }

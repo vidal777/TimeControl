@@ -51,13 +51,11 @@ public class IntroActivity extends AppCompatActivity {
         //fill list screen
 
         final List<ScreenItem> mList= new ArrayList<>();
-        mList.add(new ScreenItem("Bienvenido TimeControl","",R.drawable.logo));
-        mList.add(new ScreenItem("Registrar Empresa","Primero de todo, se necessita dar de alta el número de empleados para poder acceder a TimeControl. Una vez establecido el plan de utilizacion" +
-                " tendremos que registrar los usuarios con los codigos que os hemos mandado por email",R.drawable.sing));
-        mList.add(new ScreenItem("Control Jornada Laboral","TimeControl permite registar el inicio y finalizacion de la jornada laboral de manera simple. Solo tenemos que dar un click en el boton que encontraremos " +
-                "en el inicio de l'aplicacion",R.drawable.time));
-        mList.add(new ScreenItem("Localització","TimeControl registra la localicacion del usuario cada vez que se realiza un fitxage de salida o entrada",R.drawable.location));
-        mList.add(new ScreenItem("Depesses","Por último, TimeControl permite al usuario añadir facturas y subir el tiquet",R.drawable.dolar));
+        mList.add(new ScreenItem("Welcome TimeControl","",R.drawable.logo));
+        mList.add(new ScreenItem("Register Company","First of all, it is necessary to register the number of employees to be able to access TimeControl. Once the usage plan is established we will have to register the users with the codes that we have sent you by email",R.drawable.sing));
+        mList.add(new ScreenItem("Control Workday","TimeControl allows you to record the start and end of the workday in a simple way. We just have to click on the button that we will find at the beginning of the application",R.drawable.time));
+        mList.add(new ScreenItem("Location","Time Control records the user's location each time an exit or entry is made",R.drawable.location));
+        mList.add(new ScreenItem("Expenses","Finally, TimeControl allows the user to add invoices and upload the ticket",R.drawable.dolar));
 
         //setup viewpager
 
@@ -113,7 +111,7 @@ public class IntroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savePrefsData();
-                Intent intent= new Intent(IntroActivity.this,SignActivity.class);
+                Intent intent= new Intent(IntroActivity.this,User_or_Admin.class);
                 startActivity(intent);
                 finish();
 

@@ -14,7 +14,7 @@
         android:textColor="@color/colorAccent" />
 
     <TextView
-        android:id="@+id/Hores"
+        android:id="@+id/Hours"
 
         android:layout_width="109dp"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/Minuts"
+        android:id="@+id/Minutes"
 
         android:layout_width="110dp"
         android:layout_height="match_parent"

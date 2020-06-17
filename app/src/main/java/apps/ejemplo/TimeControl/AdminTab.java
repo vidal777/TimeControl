@@ -41,7 +41,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -324,7 +323,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
     private void JSON(String result){
         usersList.clear();
-        ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hores","Minuts"},new int[]{R.id.Name,R.id.Hores,R.id.Minuts});
+        ListAdapter adapter=new SimpleAdapter(getContext(),usersList,R.layout.list_item,new String[]{"Name","Hours","Minutes"},new int[]{R.id.Name,R.id.Hours,R.id.Minutes});
         try {
             JSONObject jsonObj = new JSONObject(result);
             JSONArray users=jsonObj.getJSONArray("users");
@@ -346,9 +345,9 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                     //getting product object from json array
                     HashMap<String, String> user = new HashMap<>();
                     user.put("Uid",uid);
-                    user.put("Hores",hour);
+                    user.put("Hours",hour);
                     user.put("Name",name);
-                    user.put("Minuts",minuts);
+                    user.put("Minutes",minuts);
 
                     usersList.add(user);
 
@@ -405,13 +404,13 @@ public class AdminTab extends Fragment implements View.OnClickListener {
 
                     }
                 });
-                builderInner.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                builderInner.setNegativeButton("Register", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
                         api.set_excel(user.getUid(),user.getEmail(),Position+"","Register",data_entrada,data_sortida);
                     }
                 });
-                builderInner.setNegativeButton("Hours", new DialogInterface.OnClickListener() {
+                builderInner.setPositiveButton("Hours", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
                         api.set_excel(user.getUid(),user.getEmail(),Position+"","Hours",data_entrada,data_sortida);
@@ -461,7 +460,7 @@ public class AdminTab extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnOk:
                 if (btnEntrada.getText().toString().matches("") && btnSortida.getText().toString().matches("")){
-                    FancyToast.makeText(getContext(), "Necessita insertar data",
+                    FancyToast.makeText(getContext(), "You need to insert data",
                             FancyToast.LENGTH_SHORT,FancyToast.ERROR,true).show();
 
                 }else{

@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/linearLayout"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="apps.ejemplo.TimeControl.MainActivity">
 
     <com.google.android.material.textview.MaterialTextView
@@ -15,7 +19,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="20dp"
-        android:text="Garantiza el registro diario de la jornada laboral"
+        android:text="Guarantees daily registration of working hours"
         android:textAlignment="center"
         android:textColor="#4CAF50"
         android:textSize="24sp" />
@@ -42,7 +46,7 @@
             android:id="@+id/edtNameCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre Empresa"
+            android:hint="Name Company"
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +80,7 @@
             android:id="@+id/edtNumberWorkers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Numero empleados"
+            android:hint="Number workers"
             android:inputType="none|number" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -105,14 +109,14 @@
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_weight="1"
-        android:text="He leído y acepto el Aviso Legal y la Política de Privicidad." />
+        android:text=" I have read and accept the Legal Notice and the Privacy Policy." />
 
     <CheckBox
         android:id="@+id/checkConditions"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="He leído y acepto los Términos y Condiciones de uso. Condiciones Generales de Contratación." />
+        android:text=" I have read and accept the Terms and Conditions of use." />
 
     <Button
         android:id="@+id/btnSend"

@@ -32,6 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import apps.ejemplo.TimeControl.R;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -40,7 +42,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import com.squareup.picasso.Picasso;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -202,7 +204,7 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
         if(imageuri!=null){
             imageView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            Picasso.get().load(imageuri).rotate(90).into(imageView);
+            Glide.with(getActivity()).load(imageuri).into(imageView);
         }
 
 
@@ -267,7 +269,6 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
 
 
     private void JSON_expense(String result){
-        Log.i("UIDADMIN",result);
         int suma = 0;
         expensesList.clear();
         ListAdapter adapter = new SimpleAdapter(getContext(), expensesList, R.layout.list_item_expense_admin, new String[]{"Name","Date", "Concept","Total"}, new int[]{R.id.Name,R.id.Date, R.id.Concept,R.id.Total});
@@ -280,7 +281,6 @@ public class ExpenseAdminTab extends Fragment implements View.OnClickListener{
                 listViewExpense.setAdapter(null);
 
             }else{
-                Log.i("USERS",users.toString());
 
                 //traversing through all the object
                 for (int i = 0; i < users.length(); i++) {

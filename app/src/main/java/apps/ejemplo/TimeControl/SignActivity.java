@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +43,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnSign,btnLog,btnRegisterCompany;
     private TextInputEditText edtEmail, edtPass,edtName,edtCode;
     private static final String TAG = "GoogleActivity";
+    private LinearLayout linearLayout;
 
 
 
@@ -66,6 +70,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         edtCode=findViewById(R.id.edtCode);
         btnSign = findViewById(R.id.btnSign);
         btnLog=findViewById(R.id.btnLog2);
+        linearLayout=findViewById(R.id.linearLayout);
 
 
 
@@ -74,6 +79,16 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         btnSign.setOnClickListener(this);
         btnLog.setOnClickListener(this);
         btnRegisterCompany.setOnClickListener(this);
+        linearLayout.setOnClickListener(this);
+
+        linearLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
 
 
     }
@@ -229,6 +244,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(mainActivity);
                 //finish();
                 break;
+            //case R.id.linearLayout:
+
         }
     }
 
